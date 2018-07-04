@@ -4,11 +4,7 @@ using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour {
     public float speed;
-    public float rotationSpeed;
-    public float topOfScreen;
-    public float bottomOfScreen;
-    public float leftOfScreen;
-    public float rightOfScreen;
+    //public float rotationSpeed;
 
     public Rigidbody2D rb2dplayer;
 
@@ -20,66 +16,30 @@ public class PlayerMovement : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update ()
-<<<<<<< HEAD
-    {
-        Debug.Log(transform.position);
-        ScreenWrap();
-	}
-
-    // Rigidbody physics calculations every fixed framerate frame
-    private void FixedUpdate()
-=======
->>>>>>> eb471397703b1a805448bfdf216c33ad6a18d2a6
     {
         // Check for vertical input from keyboard
         float thrust = Input.GetAxis("Vertical");
-<<<<<<< HEAD
-        
+
         // Check for horizontal input from keyboard
-=======
+        float lateralMovement = Input.GetAxis("Horizontal");
 
-        // Floating point variable for horizontal input
->>>>>>> eb471397703b1a805448bfdf216c33ad6a18d2a6
-        float rotate = Input.GetAxis("Horizontal");
+        float xMovement = lateralMovement * speed * Time.deltaTime;
+        float yMovement = thrust * speed * Time.deltaTime;
 
-        float distance = thrust * speed * Time.deltaTime;
         Vector3 newPosition = new Vector3();
-        newPosition.x = transform.position.x + (distance * transform.up.x);
-        newPosition.y = transform.position.y + (distance * transform.up.y);
-        newPosition.z = transform.position.z + (distance * transform.up.z);
+        newPosition.x = transform.position.x + (xMovement * transform.right.x);
+        newPosition.y = transform.position.y + (yMovement * transform.up.y);
+        newPosition.z = transform.position.z + ((xMovement + yMovement) * transform.up.z);
 
         transform.position = newPosition;
 
         // Rotate rigidbody on z axis
-        transform.Rotate(0, 0, -rotate * rotationSpeed);
-    }
-<<<<<<< HEAD
-    
-    // Handle Screen wrapping
-    void ScreenWrap()
-    {
-        Vector2 newPosition = transform.position;
-        if (transform.position.y > topOfScreen)
-        {
-            newPosition.y = bottomOfScreen;
-        }
-        if (transform.position.y < bottomOfScreen)
-        {
-            newPosition.y = topOfScreen;
-        }
-        if (transform.position.x > rightOfScreen)
-        {
-            newPosition.x = leftOfScreen;
-        }
-        if (transform.position.x < leftOfScreen)
-        {
-            newPosition.x = rightOfScreen;
-        }
-=======
+        //transform.Rotate(0, 0, -rotate * rotationSpeed);
+	}
 
     // Rigidbody physics calculations every fixed framerate frame
-    private void FixedUpdate()
-    {
+    //void FixedUpdate()
+    //{
         //// Floating point variable for vertical input
         //float thrust = Input.GetAxis("Vertical");
         
@@ -91,6 +51,5 @@ public class PlayerMovement : MonoBehaviour {
 
         //// Rotate rigidbody on z axis
         //transform.Rotate(0, 0, -rotate * rotationSpeed);
->>>>>>> eb471397703b1a805448bfdf216c33ad6a18d2a6
-    }
+    //}
 }
