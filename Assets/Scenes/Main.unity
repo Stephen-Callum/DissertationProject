@@ -143,14 +143,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 959f7ca9c0e67904da1670a50fe035a2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-<<<<<<< HEAD
   speed: 8
   rb2dplayer: {fileID: 82930576}
-=======
-  speed: 2
-  rotationSpeed: 5
-  rb2dplayer: {fileID: 0}
->>>>>>> Camera
 --- !u!50 &82930576
 Rigidbody2D:
   serializedVersion: 4
