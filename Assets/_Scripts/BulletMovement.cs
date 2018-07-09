@@ -10,11 +10,11 @@ public class BulletMovement : MonoBehaviour {
     // Use this for initialization
 	void Start () {
         bulletRB = GetComponent<Rigidbody2D>();
-        bulletRB.AddForce(transform.up * bulletSpeed);
+        
 	}
 	
 	// Update is called once per frame
 	void Update () {
-		
+		bulletRB.velocity = -transform.up * bulletSpeed * Time.deltaTime;
 	}
 }
