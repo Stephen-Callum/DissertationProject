@@ -134,13 +134,13 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 30457015}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: -1, w: 0}
   m_LocalPosition: {x: 0.12, y: -4.6800003, z: 0}
   m_LocalScale: {x: 2, y: 2, z: 2}
   m_Children: []
   m_Father: {fileID: 178396992}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: -180}
 --- !u!1 &82930574
 GameObject:
   m_ObjectHideFlags: 0
@@ -265,7 +265,7 @@ CircleCollider2D:
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 1.2}
   serializedVersion: 2
-  m_Radius: 1.2
+  m_Radius: 2.4
 --- !u!1 &178396990
 GameObject:
   m_ObjectHideFlags: 0
@@ -354,10 +354,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 14c81e3511c9b644b8798f545a19dbab, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  fireRate: 0
+  fireRate: 1
   bulletPrefab: {fileID: 50219422969285000, guid: 979acf75221841d42993ccc8495167c0,
     type: 2}
-  enemyTurret: {fileID: 30457016}
+  enemyTurretEnd: {fileID: 30457016}
 --- !u!50 &178396994
 Rigidbody2D:
   serializedVersion: 4
