@@ -11,7 +11,7 @@ public class PoolingSystem : MonoBehaviour {
     private GameObject prefab;
 
     private Queue<GameObject> inPoolObjects = new Queue<GameObject>();
-
+   
     public static PoolingSystem Instance { get; private set; }
 
     private void Awake()
@@ -49,8 +49,8 @@ public class PoolingSystem : MonoBehaviour {
     }
 
     // Use this for initialization
-    void Start () {
-		
+     void Start () {
+        
 	}
 	
 	// Update is called once per frame

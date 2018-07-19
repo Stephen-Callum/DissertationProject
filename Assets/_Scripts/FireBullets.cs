@@ -8,11 +8,16 @@ public class FireBullets : MonoBehaviour {
 
     private float nextShot;
 
-    public Rigidbody2D bulletPrefab;
-    public Transform enemyTurretEnd;
+    //public Rigidbody2D bulletPrefab;
+    public Transform frontTurretEnd;
+    public Transform leftTurretEnd;
+    public Transform rightTurretEnd;
+
+    ObjectPoolingSystem objectPoolingSystem;
 
 	// Use this for initialization
 	void Start () {
+        objectPoolingSystem = ObjectPoolingSystem.SharedInstance;
     }
 	
 	// Update is called once per frame
@@ -20,7 +25,9 @@ public class FireBullets : MonoBehaviour {
         if (Time.time > nextShot)
         {
             nextShot = Time.time + fireRate;
-            Instantiate(bulletPrefab, enemyTurretEnd.position, enemyTurretEnd.rotation);
+            objectPoolingSystem.GetFromPool("Bullet", frontTurretEnd);
+            objectPoolingSystem.GetFromPool("Bullet", leftTurretEnd);
+            objectPoolingSystem.GetFromPool("Bullet", rightTurretEnd);
         }
         
 	}
