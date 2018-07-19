@@ -49,7 +49,6 @@ public class ObjectPoolingSystem : MonoBehaviour {
         }
 	}
     
-
     public GameObject GetFromPool (string tag, Transform turretEnd)
     {
         if (!poolDictionary.ContainsKey(tag))
@@ -65,7 +64,6 @@ public class ObjectPoolingSystem : MonoBehaviour {
         poolDictionary[tag].Enqueue(objectFromPool);
 
         return objectFromPool;
-
     }
 	
 	// Update is called once per frame
