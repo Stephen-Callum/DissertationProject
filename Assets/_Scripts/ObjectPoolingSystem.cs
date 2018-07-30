@@ -62,6 +62,13 @@ public class ObjectPoolingSystem : MonoBehaviour {
         objectFromPool.transform.position = turretEnd.transform.position;
         objectFromPool.transform.rotation = turretEnd.transform.rotation;
 
+        IPooledObject pooledObj = objectFromPool.GetComponent<IPooledObject>();
+
+        if (pooledObj != null)
+        {
+            pooledObj.OnObjectSpawn();
+        }
+
         poolDictionary[tag].Enqueue(objectFromPool);
 
         return objectFromPool;

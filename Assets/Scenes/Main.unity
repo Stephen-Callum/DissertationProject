@@ -385,9 +385,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   fireRate: 1
-  frontTurretEnd: {fileID: 0}
-  leftTurretEnd: {fileID: 0}
-  rightTurretEnd: {fileID: 0}
+  frontTurretEnd: {fileID: 30457016}
+  leftTurretEnd: {fileID: 2129012153}
+  rightTurretEnd: {fileID: 11729928}
 --- !u!50 &178396994
 Rigidbody2D:
   serializedVersion: 4
@@ -510,7 +510,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   pools:
   - bulletType: Bullet
-    size: 3
+    size: 50
     projectilePrefab: {fileID: 1590655185382670, guid: 979acf75221841d42993ccc8495167c0,
       type: 2}
 --- !u!4 &860713082
