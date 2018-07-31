@@ -5,24 +5,19 @@ using UnityEngine;
 public class FireBullets : MonoBehaviour {
 
     public float fireRate;
-    public GameObject bulletPrefab;
-    public GameObject EMPCharge;
 
-    private Transform turretEnd;
     private float nextShot;
 
-    //public Transform frontTurretEnd;
-    //public Transform leftTurretEnd;
-    //public Transform rightTurretEnd;
+    //public Rigidbody2D bulletPrefab;
+    public Transform frontTurretEnd;
+    public Transform leftTurretEnd;
+    public Transform rightTurretEnd;
 
-    private void Awake()
-    {
-        SimplePool.Preload(bulletPrefab, 10);
-    }
+    ObjectPoolingSystem objectPoolingSystem;
 
-    // Use this for initialization
-    void Start () {
-        turretEnd = GetComponent<GameObject>().transform;
+	// Use this for initialization
+	void Start () {
+        objectPoolingSystem = ObjectPoolingSystem.SharedInstance;
     }
 	
 	// Update is called once per frame
@@ -30,8 +25,9 @@ public class FireBullets : MonoBehaviour {
         if (Time.time > nextShot)
         {
             nextShot = Time.time + fireRate;
-            SimplePool.Spawn(bulletPrefab, turretEnd);
-            SimplePool.Despawn(bulletPrefab);
+            objectPoolingSystem.GetFromPool("Bullet", frontTurretEnd);
+            objectPoolingSystem.GetFromPool("Bullet", leftTurretEnd);
+            objectPoolingSystem.GetFromPool("Bullet", rightTurretEnd);
         }
         
 	}
