@@ -4,6 +4,10 @@ using UnityEngine;
 
 public class EnemyMovement : MonoBehaviour {
 
+    public Quaternion target;
+    public float smoothing = 10.0f;
+    Quaternion shipRotation;
+
 	// Use this for initialization
 	void Start () {
 	}
@@ -14,10 +18,11 @@ public class EnemyMovement : MonoBehaviour {
 
     private void FixedUpdate()
     {
-        transform.eulerAngles = new Vector3(
-            transform.eulerAngles.x,
-            transform.eulerAngles.y,
-            transform.eulerAngles.z + 45
-        );
+        Quaternion.LookRotation(target.transform.position - transform.position);
+
+        if (transform.rotation > target)
+        {
+            transform.rotation = Quaternion.RotateTowards(transform.rotation, shipRotation, Time.deltaTime * smoothing);
+        }
     }
 }

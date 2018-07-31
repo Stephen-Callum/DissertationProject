@@ -11,6 +11,11 @@ public class ObjectPoolingSystem : MonoBehaviour {
         public int size;
         public GameObject projectilePrefab;
     }
+    //public Transform turretEnd;
+    public List<Pool> pools;
+
+    // A dictionary that stores separate queues of pooled game objects
+    public Dictionary<string, Queue<GameObject>> poolDictionary;
 
     #region Singleton
 
@@ -22,18 +27,18 @@ public class ObjectPoolingSystem : MonoBehaviour {
     }
     #endregion
 
-    //public Transform turretEnd;
-    public List<Pool> pools;
-
-    // A dictionary that stores separate queues of pooled game objects
-    public Dictionary<string, Queue<GameObject>> poolDictionary;
-
 	// Use this for initialization
-	void Start () {
-        // Allocate poolDictionary to memory
+	void Start ()
+    {
+        CreatePoolDictionary();
+    }
+
+    public void CreatePoolDictionary ()
+    {
+        // Allocate memory for poolDictionary
         poolDictionary = new Dictionary<string, Queue<GameObject>>();
 
-        // For every pool in List<pools> create a queue of inactive game objects and enqueue them, then add them to the dictionary.
+        // For every pool in List<pools> create a queue of type GameObject and enqueue inactivee gameobjects, then add them to the dictionary.
         foreach (Pool pool in pools)
         {
             Queue<GameObject> projectilePool = new Queue<GameObject>();
@@ -47,8 +52,13 @@ public class ObjectPoolingSystem : MonoBehaviour {
 
             poolDictionary.Add(pool.bulletType, projectilePool);
         }
-	}
-    
+    }
+
+    public void ReturnToPool (GameObject obj)
+    {
+        obj.SetActive(false);
+        poolDictionary[tag].Enqueue(obj);
+    }
 
     public GameObject GetFromPool (string tag, Transform turretEnd)
     {
