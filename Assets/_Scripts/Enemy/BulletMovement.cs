@@ -2,18 +2,17 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BulletMovement : MonoBehaviour {
+public class BulletMovement : MonoBehaviour, IPooledObject {
 
     public float bulletSpeed;
 
     public Rigidbody2D bulletRB;
 	// Use this for initialization
-	void Start () {
+	public void OnObjectSpawn () {
         bulletRB.velocity = (transform.up * bulletSpeed);
 	}
 	
 	// Update is called once per frame
 	void Update () {
-		
 	}
 }

@@ -8,6 +8,7 @@ public class ObjectPoolingSystem : MonoBehaviour {
     public class Pool
     {
         public string bulletType;
+        public int bulletDamage;
         public int size;
         public GameObject projectilePrefab;
     }
@@ -29,7 +30,13 @@ public class ObjectPoolingSystem : MonoBehaviour {
     public Dictionary<string, Queue<GameObject>> poolDictionary;
 
 	// Use this for initialization
-	void Start () {
+	void Start ()
+    {
+        InstantiatePool();
+    }
+
+    public void InstantiatePool()
+    {
         // Allocate poolDictionary to memory
         poolDictionary = new Dictionary<string, Queue<GameObject>>();
 
@@ -47,8 +54,8 @@ public class ObjectPoolingSystem : MonoBehaviour {
 
             poolDictionary.Add(pool.bulletType, projectilePool);
         }
-	}
-    
+    }
+
     public GameObject GetFromPool (string tag, Transform turretEnd)
     {
         if (!poolDictionary.ContainsKey(tag))
@@ -61,10 +68,29 @@ public class ObjectPoolingSystem : MonoBehaviour {
         objectFromPool.transform.position = turretEnd.transform.position;
         objectFromPool.transform.rotation = turretEnd.transform.rotation;
 
+        IPooledObject pooledObj = objectFromPool.GetComponent<IPooledObject>();
+
+        if (pooledObj != null)
+        {
+            pooledObj.OnObjectSpawn();
+        }
+
         poolDictionary[tag].Enqueue(objectFromPool);
 
         return objectFromPool;
     }
+
+    public void ReturnToPool(string tag, GameObject objToPool)
+    {
+        objToPool.SetActive(false);
+        poolDictionary[tag].Enqueue(objToPool);
+    }
+    
+    //// return bullet damage of specific bullet type.
+    //public int GetBulletDamage(string tag)
+    //{
+        
+    //}
 	
 	// Update is called once per frame
 	void Update () {

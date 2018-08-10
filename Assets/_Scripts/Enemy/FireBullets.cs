@@ -25,9 +25,9 @@ public class FireBullets : MonoBehaviour {
         if (Time.time > nextShot)
         {
             nextShot = Time.time + fireRate;
-            objectPoolingSystem.GetFromPool("Bullet", frontTurretEnd);
-            objectPoolingSystem.GetFromPool("Bullet", leftTurretEnd);
-            objectPoolingSystem.GetFromPool("Bullet", rightTurretEnd);
+            objectPoolingSystem.GetFromPool("DamagingBullet", frontTurretEnd);
+            objectPoolingSystem.GetFromPool("DamagingBullet", leftTurretEnd);
+            objectPoolingSystem.GetFromPool("DamagingBullet", rightTurretEnd);
         }
         
 	}
