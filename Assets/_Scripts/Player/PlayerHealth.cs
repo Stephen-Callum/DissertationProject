@@ -8,20 +8,20 @@ public class PlayerHealth : MonoBehaviour {
 
     public int startingHealth = 100;
     public int currentHealth;
+    public float flashSpeed = 5f;
     public Slider healthSlider;
     public Image damageImage;
-    public float flashSpeed = 5f;
+    
     public Color flashColour = new Color(1f, 0f, 0f, 0.1f);
 
-    Animator anim;
-    PlayerMovement playerMovement;
-
-    bool isDead;
-    bool damaged;
+    // Animator anim;
+    private PlayerMovement playerMovement;
+    private bool isDead;
+    private bool damaged;
 
     private void Awake()
     {
-        anim = GetComponent<Animator>();
+        //anim = GetComponent<Animator>();
         playerMovement = GetComponent<PlayerMovement>();
         currentHealth = startingHealth;
     }
@@ -55,7 +55,7 @@ public class PlayerHealth : MonoBehaviour {
     private void Death()
     {
         isDead = true;
-        //anim.SetTrigger("Die");
+        //  anim.SetTrigger("Die");
         playerMovement.enabled = false;
     }
 }

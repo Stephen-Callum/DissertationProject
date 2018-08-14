@@ -4,31 +4,48 @@ using UnityEngine;
 
 public class FireBullets : MonoBehaviour {
 
-    public float fireRate;
-
-    private float nextShot;
-
-    //public Rigidbody2D bulletPrefab;
     public Transform frontTurretEnd;
     public Transform leftTurretEnd;
     public Transform rightTurretEnd;
+    public float fireRate;
+
+    private float nextShot;
+    private bool canFire;
 
     ObjectPoolingSystem objectPoolingSystem;
 
-	// Use this for initialization
-	void Start () {
+    private void Awake()
+    {
+        canFire = true;
+    }
+
+    // Use this for initialization
+    private void Start () {
         objectPoolingSystem = ObjectPoolingSystem.SharedInstance;
     }
 	
 	// Update is called once per frame
-	void Update () {
-        if (Time.time > nextShot)
+	private void Update ()
+    {
+        BulletFire();
+    }
+
+    private void BulletFire()
+    {
+        if (Time.time > nextShot && canFire)
         {
             nextShot = Time.time + fireRate;
             objectPoolingSystem.GetFromPool("DamagingBullet", frontTurretEnd);
             objectPoolingSystem.GetFromPool("DamagingBullet", leftTurretEnd);
             objectPoolingSystem.GetFromPool("DamagingBullet", rightTurretEnd);
         }
-        
-	}
+    }
+
+    public void CeaseFire(bool gameOver)
+    {
+        if(gameOver == true)
+        {
+            canFire = false;
+        }
+    }
 }
