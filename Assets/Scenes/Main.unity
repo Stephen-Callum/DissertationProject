@@ -510,11 +510,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   pools:
   - bulletType: Bullet
-<<<<<<< HEAD
     size: 10
-=======
-    size: 50
->>>>>>> 373b89981d91476bbf1320ffd6ab91855301afc8
     projectilePrefab: {fileID: 1590655185382670, guid: 979acf75221841d42993ccc8495167c0,
       type: 2}
 --- !u!4 &860713082

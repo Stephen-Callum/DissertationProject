@@ -16,13 +16,13 @@ public class EnemyMovement : MonoBehaviour {
 	void Update () {
 	}
 
-    private void FixedUpdate()
-    {
-        Quaternion.LookRotation(target.transform.position - transform.position);
+    //private void FixedUpdate()
+    //{
+    //    Quaternion.LookRotation(target.transform.position - transform.position);
 
-        if (transform.rotation > target)
-        {
-            transform.rotation = Quaternion.RotateTowards(transform.rotation, shipRotation, Time.deltaTime * smoothing);
-        }
-    }
+    //    if (transform.rotation > target)
+    //    {
+    //        transform.rotation = Quaternion.RotateTowards(transform.rotation, shipRotation, Time.deltaTime * smoothing);
+    //    }
+    //}
 }

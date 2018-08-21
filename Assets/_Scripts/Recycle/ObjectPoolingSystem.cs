@@ -52,11 +52,9 @@ public class ObjectPoolingSystem : MonoBehaviour {
 
             poolDictionary.Add(pool.bulletType, projectilePool);
         }
-<<<<<<< HEAD:Assets/_Scripts/ObjectPoolingSystem.cs
+
 	}
     
-=======
-    }
 
     public void ReturnToPool (GameObject obj)
     {
@@ -64,7 +62,6 @@ public class ObjectPoolingSystem : MonoBehaviour {
         poolDictionary[tag].Enqueue(obj);
     }
 
->>>>>>> 373b89981d91476bbf1320ffd6ab91855301afc8:Assets/_Scripts/Recycle/ObjectPoolingSystem.cs
     public GameObject GetFromPool (string tag, Transform turretEnd)
     {
         if (!poolDictionary.ContainsKey(tag))

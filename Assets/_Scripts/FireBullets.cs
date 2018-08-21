@@ -31,7 +31,6 @@ public class FireBullets : MonoBehaviour {
         {
             nextShot = Time.time + fireRate;
             SimplePool.Spawn(bulletPrefab, turretEnd);
-            SimplePool.Despawn(bulletPrefab);
         }
         
 	}
