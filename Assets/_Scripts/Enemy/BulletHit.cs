@@ -20,14 +20,17 @@ public class BulletHit : MonoBehaviour {
     {
         if (collision.gameObject.CompareTag("Player"))
         {
-            Debug.Log(collision.name);
-            objectPoolingSystem.ReturnToPool("DamagingBullet", gameObject);
-            playerHealth.TakeDamage(bulletDamage);
+            if (playerHealth.isVulnerable)
+            {
+                Debug.Log(collision.name);
+                objectPoolingSystem.ReturnToPool("DamagingBullet", gameObject);
+                playerHealth.TakeDamage(bulletDamage);
+            }
         }
     }
 
     // Use this for initialization
-    void Start()
+    private void Start()
     {
         objectPoolingSystem = ObjectPoolingSystem.SharedInstance;
     }

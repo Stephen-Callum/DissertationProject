@@ -11,8 +11,4 @@ public class BulletMovement : MonoBehaviour, IPooledObject {
 	public void OnObjectSpawn () {
         bulletRB.velocity = (transform.up * bulletSpeed);
 	}
-	
-	// Update is called once per frame
-	void Update () {
-	}
 }

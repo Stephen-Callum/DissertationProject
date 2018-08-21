@@ -16,9 +16,9 @@ public class GameOverManager : MonoBehaviour {
     private Animator anim;
     private Text restartText;
     private PlayerHealth playerHealth;
+    private EnemyHealth enemyHealth;
     private FireBullets fireBullets;
     
-
     private void Awake()
     {
         anim = GetComponent<Animator>();
@@ -26,6 +26,7 @@ public class GameOverManager : MonoBehaviour {
         player = GameObject.FindGameObjectWithTag("Player");
         playerHealth = player.GetComponent<PlayerHealth>();
         enemy = GameObject.FindGameObjectWithTag("Enemy");
+        enemyHealth = enemy.GetComponent<EnemyHealth>();
         fireBullets = enemy.GetComponent<FireBullets>();
         isOver = false;
         timeToRestart = restartDelay;
@@ -44,7 +45,7 @@ public class GameOverManager : MonoBehaviour {
 
     private void OnDeath()
     {
-        if (playerHealth.currentHealth <= 0)
+        if (playerHealth.currentHealth <= 0 || enemyHealth.currentHealth <= 0)
         {
             anim.SetTrigger("GameOver");
             restartTimer += Time.deltaTime;

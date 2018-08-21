@@ -8,8 +8,7 @@ public class ObjectPoolingSystem : MonoBehaviour {
     public class Pool
     {
         public string bulletType;
-        public int bulletDamage;
-        public int size;
+        public int poolSize;
         public GameObject projectilePrefab;
     }
 
@@ -45,7 +44,7 @@ public class ObjectPoolingSystem : MonoBehaviour {
         {
             Queue<GameObject> projectilePool = new Queue<GameObject>();
 
-            for (int i = 0; i < pool.size; i++)
+            for (int i = 0; i < pool.poolSize; i++)
             {
                 GameObject obj = Instantiate(pool.projectilePrefab);
                 obj.SetActive(false);
