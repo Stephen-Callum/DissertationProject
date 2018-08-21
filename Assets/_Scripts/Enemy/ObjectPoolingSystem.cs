@@ -53,6 +53,13 @@ public class ObjectPoolingSystem : MonoBehaviour {
 
             poolDictionary.Add(pool.bulletType, projectilePool);
         }
+	}
+    
+
+    public void ReturnToPool (GameObject obj)
+    {
+        obj.SetActive(false);
+        poolDictionary[tag].Enqueue(obj);
     }
 
     public GameObject GetFromPool (string tag, Transform turretEnd)

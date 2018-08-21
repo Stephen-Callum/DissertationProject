@@ -1046,8 +1046,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pools:
+  - bulletType: Bullet
+    size: 10
   - bulletType: DamagingBullet
     poolSize: 200
+    bulletDamage: 1
+    size: 200
     projectilePrefab: {fileID: 1590655185382670, guid: 979acf75221841d42993ccc8495167c0,
       type: 2}
   - bulletType: EMPCharge
