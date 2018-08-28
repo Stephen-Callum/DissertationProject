@@ -19,10 +19,12 @@ public class PlayerMovement : MonoBehaviour {
         float xMovement = lateralMovement * speed * Time.deltaTime;
         float yMovement = thrust * speed * Time.deltaTime;
 
-        Vector3 newPosition = new Vector3();
-        newPosition.x = transform.position.x + (xMovement * transform.right.x);
-        newPosition.y = transform.position.y + (yMovement * transform.up.y);
-        newPosition.z = transform.position.z + ((xMovement + yMovement) * transform.up.z);
+        Vector3 newPosition = new Vector3
+        {
+            x = transform.position.x + (xMovement * transform.right.x),
+            y = transform.position.y + (yMovement * transform.up.y),
+            z = transform.position.z + ((xMovement + yMovement) * transform.up.z)
+        };
 
         transform.position = newPosition;
 	}

@@ -7,19 +7,48 @@ public class EnemyHealth : MonoBehaviour {
 
     public int startingHealth = 100;
     public int currentHealth;
-    public float flashSpeed = 5f;
+    public float flashSpeed = 5.0f;
     public Slider healthSlider;
     public Image damageImage;
-    public Color flashColour = new Color(1f, 0f, 1f, 0.1f);
+    public Color flashColour = new Color(1.0f, 0.0f, 1.0f, 0.1f);
 
     private GameObject player;
+    private PlayerHealth playerHealth;
     private PlayerMovement playerMovement;
     private bool isDead;
     private bool isDamaged;
+    private float healthRemaining;
+
+    public void TakeDamage(int damage)
+    {
+        isDamaged = true;
+        currentHealth -= damage;
+        healthSlider.value = currentHealth;
+        if(currentHealth <= 0 && !isDead)
+        {
+            playerHealth.isVulnerable = false;
+            Death();
+        }
+    }
+
+    // Calculate percentage health left for enemey
+    public float HealthRemainingScore()
+    {
+        if (currentHealth > 0)
+        {
+            return healthRemaining = 1 - (currentHealth / startingHealth);
+        }
+        else if(currentHealth == 0)
+        {
+            return healthRemaining = 1.0f;
+        }
+        return 0;
+    }
 
     private void Awake()
     {
         player = GameObject.FindGameObjectWithTag("Player");
+        playerHealth = player.GetComponent<PlayerHealth>();
         playerMovement = player.GetComponent<PlayerMovement>();
         currentHealth = startingHealth;
         isDamaged = false;
@@ -44,16 +73,7 @@ public class EnemyHealth : MonoBehaviour {
         isDamaged = false;
     }
 
-    public void TakeDamage(int damage)
-    {
-        isDamaged = true;
-        currentHealth -= damage;
-        healthSlider.value = currentHealth;
-        if(currentHealth <= 0 && !isDead)
-        {
-            Death();
-        }
-    }
+    
     
     private void Death()
     {

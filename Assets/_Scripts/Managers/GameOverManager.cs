@@ -24,8 +24,8 @@ public class GameOverManager : MonoBehaviour {
         anim = GetComponent<Animator>();
         restartText = GameObject.Find("RestartCountdown").GetComponent<Text>();
         player = GameObject.FindGameObjectWithTag("Player");
-        playerHealth = player.GetComponent<PlayerHealth>();
         enemy = GameObject.FindGameObjectWithTag("Enemy");
+        playerHealth = player.GetComponent<PlayerHealth>();
         enemyHealth = enemy.GetComponent<EnemyHealth>();
         fireBullets = enemy.GetComponent<FireBullets>();
         isOver = false;

@@ -4,8 +4,7 @@ using UnityEngine;
 
 public class BulletHit : MonoBehaviour {
 
-    [SerializeField]
-    private int bulletDamage;
+    [SerializeField] private int bulletDamage;
     private GameObject player;
     private PlayerHealth playerHealth;
     private ObjectPoolingSystem objectPoolingSystem;

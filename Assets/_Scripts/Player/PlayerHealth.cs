@@ -6,21 +6,20 @@ using System;
 
 public class PlayerHealth : MonoBehaviour {
 
-    public int startingHealth = 100;
+    public int startingHealth = 3;
     public int currentHealth;
-    public float flashSpeed = 5f;
+    public float healthRemaining;
+    public float flashSpeed = 5.0f;
     public float invulnerabilityTime;
-    [NonSerialized]
-    public bool isVulnerable;
+    [NonSerialized] public bool isVulnerable;
+    public bool canCollect;
     public Slider healthSlider;
     public Image damageImage;
-    public Color flashColour = new Color(1f, 0f, 0f, 0.1f);
+    public Color flashColour = new Color(1.0f, 0.0f, 0.0f, 0.1f);
 
-    // Animator anim;
     private PlayerMovement playerMovement;
     private bool isDead;
     private bool isDamaged;
-    
 
     private void Awake()
     {
@@ -30,12 +29,35 @@ public class PlayerHealth : MonoBehaviour {
         invulnerabilityTime = 1.5f;
         isVulnerable = true;
         isDead = false;
+        canCollect = true;
     }
-	
+
+	public void ResetVulnerability()
+    {
+        isVulnerable = true;
+    }
+
+    public float HealthRemainingScore()
+    {
+        if (currentHealth == 1)
+        {
+            return healthRemaining = 1.0f;
+        }
+        else if(currentHealth > 1)
+        {
+            return healthRemaining = currentHealth / startingHealth;
+        }
+        else
+        {
+            return 0.01f;
+        }
+    }
+
 	// Update is called once per frame
 	private void Update()
     {
         OnHitFlash();
+        print(startingHealth);
     }
     
     // Called when the player takes damage. 'damage' refers to the amount of damage the player takes.
@@ -55,11 +77,6 @@ public class PlayerHealth : MonoBehaviour {
             Invoke("ResetVulnerability", invulnerabilityTime);
         }
     }
-
-    public void ResetVulnerability()
-    {
-        isVulnerable = true;
-    }
     
     private void OnHitFlash()
     {
@@ -77,6 +94,7 @@ public class PlayerHealth : MonoBehaviour {
     private void Death()
     {
         isDead = true;
+        canCollect = false;
         playerMovement.enabled = false;
     }
 }

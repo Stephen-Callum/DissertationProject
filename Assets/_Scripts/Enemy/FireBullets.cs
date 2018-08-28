@@ -5,13 +5,14 @@ using UnityEngine;
 
 public class FireBullets : MonoBehaviour {
     
-    public float fireRate;
-    public float EMPFireRate;
+    //public float fireRate;
+    //public float EMPFireRate;
 
     private int randomIndex;
     private float nextShot;
     private float nextEMPShot;
     private bool canFire;
+    private EnemyProperties enemyProperties;
     private Transform frontTurretEnd;
     private Transform leftTurretEnd;
     private Transform rightTurretEnd;
@@ -33,6 +34,7 @@ public class FireBullets : MonoBehaviour {
         frontTurretEnd = GameObject.FindGameObjectWithTag("FrontTurret").transform;
         leftTurretEnd = GameObject.FindGameObjectWithTag("LeftTurret").transform;
         rightTurretEnd = GameObject.FindGameObjectWithTag("RightTurret").transform;
+        enemyProperties = gameObject.GetComponent<EnemyProperties>();
     }
 
     // Use this for initialization
@@ -58,10 +60,11 @@ public class FireBullets : MonoBehaviour {
     {
         if (Time.time > nextShot && canFire)
         {
-            nextShot = Time.time + fireRate;
+            nextShot = Time.time + enemyProperties.BulletFireRate;
             objectPoolingSystem.GetFromPool("DamagingBullet", frontTurretEnd);
             objectPoolingSystem.GetFromPool("DamagingBullet", leftTurretEnd);
             objectPoolingSystem.GetFromPool("DamagingBullet", rightTurretEnd);
+            Debug.Log("Bullet firerate = " + enemyProperties.BulletFireRate);
         }
     }
     private void EMPFire()
@@ -69,9 +72,9 @@ public class FireBullets : MonoBehaviour {
         randomIndex = randomTransform.Next(possiblePositions.Count);
         if (Time.time > nextEMPShot && canFire)
         {
-            nextEMPShot = Time.time + EMPFireRate;
+            nextEMPShot = Time.time + enemyProperties.EMPFireRate;
             objectPoolingSystem.GetFromPool("EMPCharge", possiblePositions[randomIndex]);
-            Debug.Log("EMPFire called");
+            Debug.Log("EMP firerate = " + enemyProperties.EMPFireRate.ToString());
         }
     }
 }
