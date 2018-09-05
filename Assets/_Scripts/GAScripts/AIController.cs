@@ -3,14 +3,15 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class AIController<T> : MonoBehaviour {
+public class AIController : MonoBehaviour {
 
     public List<Genes> Population { get; private set; }
     public List<Genes> EliteGenes { get; private set; }
     public int Generation { get; private set; }
     public float? BestFitness { get; private set; }
     public float? NextBestFitness { get; private set; }
-    public Genes lastGenGenes;
+    public Genes CurrentGenes;
+    [NonSerialized]
     public string fullPath;
     public int numOfGames;
     
@@ -32,17 +33,11 @@ public class AIController<T> : MonoBehaviour {
     // Save a Population of genes
     public void SaveGeneration(string filePath)
     {
-        GeneticSaveData<T> save = new GeneticSaveData<T>
+        GeneticSaveData save = new GeneticSaveData
         {
             Generation = Generation,
-            PopulationGenes = new List<T[]>(Population.Count),
+            PopulationGenes = Population,
         };
-
-        for (int i = 0; i < Population.Count; i++)
-        {
-            save.PopulationGenes.Add(new T[numOfEnemyVariables]);
-            Array.Copy(Population[i].GeneArray, save.PopulationGenes[i], numOfEnemyVariables);
-        }
 
         FileReadAndWrite.WriteToBinaryFile(filePath, save);
     }
@@ -55,23 +50,17 @@ public class AIController<T> : MonoBehaviour {
             return false;
         }
 
-        GeneticSaveData<T> save = FileReadAndWrite.ReadFromBinaryFile<GeneticSaveData<T>>(filePath);
+        GeneticSaveData save = FileReadAndWrite.ReadFromBinaryFile<GeneticSaveData>(filePath);
         Generation = save.Generation;
-        for (int i = 0; i < save.PopulationGenes.Count; i++)
-        {
-            if (i >= Population.Count)
-            {
-                Population.Add(new Genes(numOfEnemyVariables, createRandGenes, FitnessFunction, random));
-            }
-            Array.Copy(save.PopulationGenes[i], Population[i].GeneArray, numOfEnemyVariables);
-        }
+        Population = save.PopulationGenes;
+        
         return true;
     }
 
     // Pull a gene from the population depending on the number of games played
-    public Genes GetAI(int numGamesPlayed)
+    public void GetAI(int numGamesPlayed)
     {
-        return Population[numGamesPlayed];
+        CurrentGenes = Population[numGamesPlayed];
     }
 
     public float FitnessFunction(int generationNumber)
@@ -99,7 +88,7 @@ public class AIController<T> : MonoBehaviour {
         enemy = GameObject.FindGameObjectWithTag("Enemy");
         enemyHealth = enemy.GetComponent<EnemyHealth>();
         numOfEnemyVariables = 2;
-        genes = GetComponent<Genes>();
+        genes = new Genes();
         random = new System.Random();
         Population = new List<Genes>(populationSize);
         EliteGenes = new List<Genes>(2);
@@ -116,6 +105,7 @@ public class AIController<T> : MonoBehaviour {
         {
             BreedNewGenes();
         }
+        GetAI(numOfGames);
     }
 
     private void Update()

@@ -18,7 +18,7 @@ public class FireBullets : MonoBehaviour {
     private List<Transform> possiblePositions;
     private System.Random randomTransform;
     private ObjectPoolingSystem objectPoolingSystem;
-    private AIController<GameObject> aIController;
+    private AIController aIController;
 
     public void CeaseFire(bool gameOver)
     {
@@ -34,7 +34,8 @@ public class FireBullets : MonoBehaviour {
         frontTurretEnd = GameObject.FindGameObjectWithTag("FrontTurret").transform;
         leftTurretEnd = GameObject.FindGameObjectWithTag("LeftTurret").transform;
         rightTurretEnd = GameObject.FindGameObjectWithTag("RightTurret").transform;
-        aIController = GetComponent<AIController<Genes>>();
+
+        aIController = GameObject.FindGameObjectWithTag("GAManager").GetComponent<AIController>();
     }
 
     // Use this for initialization
@@ -61,11 +62,11 @@ public class FireBullets : MonoBehaviour {
     {
         if (Time.time > nextBulletShot && canFire)
         {
-            nextBulletShot = Time.time + aIController.GetAI(aIController.numOfGames).BulletFireRate;
+            nextBulletShot = Time.time + aIController.CurrentGenes.BulletFireRate;
             objectPoolingSystem.GetFromPool("DamagingBullet", frontTurretEnd);
             objectPoolingSystem.GetFromPool("DamagingBullet", leftTurretEnd);
             objectPoolingSystem.GetFromPool("DamagingBullet", rightTurretEnd);
-            Debug.Log("Bullet firerate = " + aIController.GetAI(aIController.numOfGames).BulletFireRate);
+            Debug.Log("Bullet firerate = " + aIController.CurrentGenes.BulletFireRate);
         }
     }
 
@@ -74,9 +75,9 @@ public class FireBullets : MonoBehaviour {
         randomIndex = randomTransform.Next(possiblePositions.Count);
         if (Time.time > nextEMPShot && canFire)
         {
-            nextEMPShot = Time.time + aIController.GetAI(aIController.numOfGames).EMPFireRate;
+            nextEMPShot = Time.time + aIController.CurrentGenes.EMPFireRate;
             objectPoolingSystem.GetFromPool("EMPCharge", possiblePositions[randomIndex]);
-            Debug.Log("EMP firerate = " + aIController.GetAI(aIController.numOfGames).EMPFireRate.ToString());
+            Debug.Log("EMP firerate = " + aIController.CurrentGenes.EMPFireRate);
         }
     }
 }

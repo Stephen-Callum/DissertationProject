@@ -1172,10 +1172,10 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 1127315950}
-  - component: {fileID: 1127315951}
+  - component: {fileID: 1127315952}
   m_Layer: 0
   m_Name: GAManager
-  m_TagString: Untagged
+  m_TagString: GAManager
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1193,7 +1193,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1127315951
+--- !u!114 &1127315952
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
@@ -1201,13 +1201,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 1127315949}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5c7b02a847d212349808a571d612524a, type: 3}
+  m_Script: {fileID: 11500000, guid: c5b98044edd4f8e47b76ee07cb672412, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  bulletMinFR: 0.2
-  bulletMaxFR: 2
-  empMinFR: 4
-  empMaxFR: 10
+  numOfGames: 0
+  populationSize: 10
+  mutationRate: 0.01
 --- !u!1 &1269095177
 GameObject:
   m_ObjectHideFlags: 0

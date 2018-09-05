@@ -2,7 +2,7 @@
 using System;
 using System.Collections.Generic;
 
-public class Genes : MonoBehaviour, IRandomiseGenes{
+public class Genes : IRandomiseGenes{
 
     // Represents an array of characteristics for each individual
     public float[] GeneArray { get; private set; }
@@ -21,7 +21,7 @@ public class Genes : MonoBehaviour, IRandomiseGenes{
 
         set
         {
-            if ((value > bulletMinFR) && (value <= bulletMaxFR))
+            if ((value > BulletMinFR) && (value <= BulletMaxFR))
             {
                 bulletFireRate = value;
             }
@@ -36,7 +36,7 @@ public class Genes : MonoBehaviour, IRandomiseGenes{
 
         set
         {
-            if ((value > empMinFR) && (value <= empMaxFR))
+            if ((value > EmpMinFR) && (value <= EmpMaxFR))
             {
                 empFireRate = value;
             }
@@ -46,10 +46,10 @@ public class Genes : MonoBehaviour, IRandomiseGenes{
     // Represents the fitness of each individual where 0 is best fitness.
     public float? Fitness { get; private set; }
 
-    [SerializeField] private float bulletMinFR;
-    [SerializeField] private float bulletMaxFR;
-    [SerializeField] private float empMinFR;
-    [SerializeField] private float empMaxFR;
+    public static float BulletMinFR = 0.2f;
+    public static float BulletMaxFR = 2.0f;
+    public static float EmpMinFR = 4.0f;
+    public static float EmpMaxFR = 10.0f;
     private float bulletFireRate;
     private float empFireRate;
     private IRandomiseGenes createRandGeneInterface;
@@ -78,16 +78,14 @@ public class Genes : MonoBehaviour, IRandomiseGenes{
         Fitness = null;
 
         // for each element in the gene array, set it to a property of the enemy. 0 = Bullet Fire rate, 1 = EMP Fire Rate
-        GeneArray[0] = genes.BulletFireRate;
-        GeneArray[1] = genes.EMPFireRate;
-        createRandGeneInterface.RandomiseGenes();
+        RandomiseGenes();
     }
     
     // Randomise Genes on initialisation
     public void RandomiseGenes()
     {
-        GeneArray[0] = UnityEngine.Random.Range(bulletMinFR, bulletMaxFR);
-        GeneArray[1] = UnityEngine.Random.Range(empMinFR, empMaxFR);
+        GeneArray[0] = UnityEngine.Random.Range(BulletMinFR, BulletMaxFR);
+        GeneArray[1] = UnityEngine.Random.Range(EmpMinFR, EmpMaxFR);
         // For each element, randomise depending on that element's min and max.
     }
 
@@ -96,12 +94,12 @@ public class Genes : MonoBehaviour, IRandomiseGenes{
     {
         if (geneArrayIndex == 0)
         {
-            GeneArray[0] = UnityEngine.Random.Range(bulletMinFR, bulletMaxFR);
+            GeneArray[0] = UnityEngine.Random.Range(BulletMinFR, BulletMaxFR);
             return;
         }
         else if (geneArrayIndex == 1)
         {
-            GeneArray[1] = UnityEngine.Random.Range(empMinFR, empMaxFR);
+            GeneArray[1] = UnityEngine.Random.Range(EmpMinFR, EmpMaxFR);
             return;
         }
         return;

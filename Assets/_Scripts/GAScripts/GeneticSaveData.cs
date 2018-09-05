@@ -2,9 +2,9 @@
 using System;
 
 [Serializable]
-public class GeneticSaveData<T>
+public class GeneticSaveData
 {
-    public List<T[]> PopulationGenes;
+    public List<Genes> PopulationGenes;
     //public float Fitness;
     public int Generation;
 }

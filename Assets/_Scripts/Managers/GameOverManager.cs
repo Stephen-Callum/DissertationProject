@@ -15,7 +15,7 @@ public class GameOverManager : MonoBehaviour {
     private GameObject enemy;
     private Animator anim;
     private Text restartText;
-    private AIController<Genes> aIController; 
+    private AIController aIController; 
     private PlayerHealth playerHealth;
     private EnemyHealth enemyHealth;
     private FireBullets fireBullets;
@@ -23,7 +23,7 @@ public class GameOverManager : MonoBehaviour {
     private void Awake()
     {
         anim = GetComponent<Animator>();
-        aIController = GetComponent<AIController<Genes>>();
+        aIController = GetComponent<AIController>();
         restartText = GameObject.Find("RestartCountdown").GetComponent<Text>();
         player = GameObject.FindGameObjectWithTag("Player");
         enemy = GameObject.FindGameObjectWithTag("Enemy");
