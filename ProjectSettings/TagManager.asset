@@ -10,6 +10,7 @@ TagManager:
   - FrontTurret
   - LeftTurret
   - RightTurret
+  - GAManager
   layers:
   - Default
   - TransparentFX

@@ -3,111 +3,194 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class AIController : MonoBehaviour {
+public class AIController<T> : MonoBehaviour {
 
-    [SerializeField] private int populationSize = 200;
-    [SerializeField] private int elitism = 5;
+    public List<Genes> Population { get; private set; }
+    public List<Genes> EliteGenes { get; private set; }
+    public int Generation { get; private set; }
+    public float? BestFitness { get; private set; }
+    public float? NextBestFitness { get; private set; }
+    public Genes lastGenGenes;
+    public string fullPath;
+    public int numOfGames;
+    
+    [SerializeField] private int populationSize;
+    //[SerializeField] private int elitism = 5;
     [SerializeField] private float mutationRate = 0.01f;
-    [SerializeField] private float bulletMinFR;
-    [SerializeField] private float bulletMaxFR;
-    [SerializeField] private float empMinFR;
-    [SerializeField] private float empMaxFR;
-    private float bulletFireRate;
-    private float empFireRate;
+    private IRandomiseGenes createRandGenes;
     private int numOfEnemyVariables;
-    private EnemyProperties targetProperties;
-    private GenerateAI generate;
+    private float? fitnessSum;
+    private bool canPopulate;
+    private Genes genes;
     private GameObject enemy;
     private GameObject player;
     private PlayerHealth playerHealth;
     private EnemyHealth enemyHealth;
-    private GeneticAlgorithm<float> ga;
     private System.Random random;
+    
 
+    // Save a Population of genes
+    public void SaveGeneration(string filePath)
+    {
+        GeneticSaveData<T> save = new GeneticSaveData<T>
+        {
+            Generation = Generation,
+            PopulationGenes = new List<T[]>(Population.Count),
+        };
+
+        for (int i = 0; i < Population.Count; i++)
+        {
+            save.PopulationGenes.Add(new T[numOfEnemyVariables]);
+            Array.Copy(Population[i].GeneArray, save.PopulationGenes[i], numOfEnemyVariables);
+        }
+
+        FileReadAndWrite.WriteToBinaryFile(filePath, save);
+    }
+
+    // Load a population of genes
+    public bool LoadGeneration(string filePath)
+    {
+        if (!System.IO.File.Exists(filePath))
+        {
+            return false;
+        }
+
+        GeneticSaveData<T> save = FileReadAndWrite.ReadFromBinaryFile<GeneticSaveData<T>>(filePath);
+        Generation = save.Generation;
+        for (int i = 0; i < save.PopulationGenes.Count; i++)
+        {
+            if (i >= Population.Count)
+            {
+                Population.Add(new Genes(numOfEnemyVariables, createRandGenes, FitnessFunction, random));
+            }
+            Array.Copy(save.PopulationGenes[i], Population[i].GeneArray, numOfEnemyVariables);
+        }
+        return true;
+    }
+
+    // Pull a gene from the population depending on the number of games played
+    public Genes GetAI(int numGamesPlayed)
+    {
+        return Population[numGamesPlayed];
+    }
+
+    public float FitnessFunction(int generationNumber)
+    {
+        float score = 10.0f;
+        Genes genes = Population[generationNumber];
+        // must relate score to one population index, dont run through array
+        for (int i = 0; i < genes.GeneArray.Length; i++)
+        {
+            score *= enemyHealth.HealthRemainingScore() + playerHealth.HealthRemainingScore();
+        }
+        if (score == 0.0f)
+        {
+            return 0.0f;
+        }
+        return 10.0f / score;
+    }
+
+    // will it run more than once?
     private void Awake()
     {
+        canPopulate = true;
         player = GameObject.FindGameObjectWithTag("Player");
         playerHealth = player.GetComponent<PlayerHealth>();
         enemy = GameObject.FindGameObjectWithTag("Enemy");
         enemyHealth = enemy.GetComponent<EnemyHealth>();
-        targetProperties = enemy.GetComponent<EnemyProperties>();
-        numOfEnemyVariables = targetProperties.GetType().GetFields().Length;
-        //generate = enemy.GetComponent<GenerateAI>();
+        numOfEnemyVariables = 2;
+        genes = GetComponent<Genes>();
+        random = new System.Random();
+        Population = new List<Genes>(populationSize);
+        EliteGenes = new List<Genes>(2);
+        createRandGenes = new Genes();
         Debug.Log(numOfEnemyVariables);
+        fullPath = Application.persistentDataPath + "/" + "Genetic Save";
+        PopulateList();
     }
 
     private void Start()
     {
-        ga = new GeneticAlgorithm<float>(populationSize, numOfEnemyVariables, random, GetRandomProperties, FitnessFunction, elitism, mutationRate);
-        //generate.GetAI();
+        LoadGeneration(fullPath);
+        if (numOfGames >= 5)
+        {
+            BreedNewGenes();
+        }
     }
 
     private void Update()
     {
-        ga.NewGeneration();
-        if(ga.BestFitness == 150)
+        
+    }
+
+    // Crossover and mutate the best genes to produce child gene and add them to the population
+    private void BreedNewGenes()
+    {
+        if (Population.Count > 0)
         {
-            this.enabled = false;
+            CalculateBestFitness();
+        }
+
+        for (int i = numOfGames; i < Population.Count; i++)
+        {
+            if (i < Population.Count)
+            {
+                Genes parent1 = genes.EliteGenes[0];
+                Genes parent2 = genes.EliteGenes[1];
+
+                Genes child = parent1.Crossover(parent2);
+
+                child.Mutate(mutationRate);
+
+                Population[i] = child;
+            }
         }
     }
 
-    private float GetRandomProperties()
+    // Calculates the sum of fitnesses in the population (used in ChooseParent). For each individual of the population, find the best performing individuals and copy them to BestGenes array
+    private void CalculateBestFitness()
     {
-        float fireRate = UnityEngine.Random.Range(bulletMinFR, bulletMaxFR);
+        //fitnessSum = 0;
+        Population.Sort(CompareGenes);
+        Genes best = Population[0];
+        Genes nextBest = Population[1];
 
-        return fireRate;
+        BestFitness = best.Fitness;
+        NextBestFitness = nextBest.Fitness;
+        EliteGenes.Add(best);
+        EliteGenes.Add(nextBest);
     }
 
-    private float FitnessFunction(int index)
+    // what if there are null values?
+    private int CompareGenes(Genes a, Genes b)
     {
-        float score = 10.0f;
-        DNA<float> dna = ga.Population[index];
-
-        for (int i = 0; i < dna.Genes.Length; i++)
+        if (a.Fitness < b.Fitness)
         {
-            //if(enemyHealth.currentHealth == 0)
-            //{
-            //    score *= 5;
-            //}
-            //if (enemyHealth.currentHealth == 1)
-            //{
-            //    score *= 4;
-            //}
-            //if (enemyHealth.currentHealth == 2)
-            //{
-            //    score *= 3;
-            //}
-            //if (enemyHealth.currentHealth == 3)
-            //{
-            //    score *= 2;
-            //}
-            //if (enemyHealth.currentHealth == 4)
-            //{
-            //    score *= 1;
-            //}
-            //if (enemyHealth.currentHealth == 5)
-            //{
-            //    score *= 0.1f;
-            //}
-            //if (playerHealth.currentHealth == 0)
-            //{
-            //    score *= 0.1f;
-            //}
-            //if (playerHealth.currentHealth == 1)
-            //{
-            //    score *= 3.0f;
-            //}
-            //if (playerHealth.currentHealth == 2)
-            //{
-            //    score *= 2.0f;
-            //}
-            //if (playerHealth.currentHealth == 3)
-            //{
-            //    score *= 1.0f;
-            //}
-            score *= enemyHealth.HealthRemainingScore() + playerHealth.HealthRemainingScore();
+            return -1;
         }
-
-        return score;
+        else if (a.Fitness > b.Fitness)
+        {
+            return 1;
+        }
+        else
+        {
+            return 0;
+        }
+    }
+    
+    // Initisalises the Population list with new random genes
+    private void PopulateList()
+    {
+        if (canPopulate)
+        {
+            Generation = 0;
+            for (int i = 0; i < populationSize; i++)
+            {
+                Population.Add(new Genes(numOfEnemyVariables, createRandGenes, FitnessFunction, random));
+                Population[i].Generation = Generation;
+                Generation++;
+            }
+            canPopulate = false;
+        }
     }
 }

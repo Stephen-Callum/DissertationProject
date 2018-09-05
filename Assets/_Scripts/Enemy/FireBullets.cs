@@ -9,16 +9,16 @@ public class FireBullets : MonoBehaviour {
     //public float EMPFireRate;
 
     private int randomIndex;
-    private float nextShot;
+    private float nextBulletShot;
     private float nextEMPShot;
     private bool canFire;
-    private EnemyProperties enemyProperties;
     private Transform frontTurretEnd;
     private Transform leftTurretEnd;
     private Transform rightTurretEnd;
     private List<Transform> possiblePositions;
     private System.Random randomTransform;
     private ObjectPoolingSystem objectPoolingSystem;
+    private AIController<GameObject> aIController;
 
     public void CeaseFire(bool gameOver)
     {
@@ -34,11 +34,12 @@ public class FireBullets : MonoBehaviour {
         frontTurretEnd = GameObject.FindGameObjectWithTag("FrontTurret").transform;
         leftTurretEnd = GameObject.FindGameObjectWithTag("LeftTurret").transform;
         rightTurretEnd = GameObject.FindGameObjectWithTag("RightTurret").transform;
-        enemyProperties = gameObject.GetComponent<EnemyProperties>();
+        aIController = GetComponent<AIController<Genes>>();
     }
 
     // Use this for initialization
-    private void Start () {
+    private void Start ()
+    {
         objectPoolingSystem = ObjectPoolingSystem.SharedInstance;
         randomTransform = new System.Random();
         possiblePositions = new List<Transform>
@@ -58,23 +59,24 @@ public class FireBullets : MonoBehaviour {
 
     private void BulletFire()
     {
-        if (Time.time > nextShot && canFire)
+        if (Time.time > nextBulletShot && canFire)
         {
-            nextShot = Time.time + enemyProperties.BulletFireRate;
+            nextBulletShot = Time.time + aIController.GetAI(aIController.numOfGames).BulletFireRate;
             objectPoolingSystem.GetFromPool("DamagingBullet", frontTurretEnd);
             objectPoolingSystem.GetFromPool("DamagingBullet", leftTurretEnd);
             objectPoolingSystem.GetFromPool("DamagingBullet", rightTurretEnd);
-            Debug.Log("Bullet firerate = " + enemyProperties.BulletFireRate);
+            Debug.Log("Bullet firerate = " + aIController.GetAI(aIController.numOfGames).BulletFireRate);
         }
     }
+
     private void EMPFire()
     {
         randomIndex = randomTransform.Next(possiblePositions.Count);
         if (Time.time > nextEMPShot && canFire)
         {
-            nextEMPShot = Time.time + enemyProperties.EMPFireRate;
+            nextEMPShot = Time.time + aIController.GetAI(aIController.numOfGames).EMPFireRate;
             objectPoolingSystem.GetFromPool("EMPCharge", possiblePositions[randomIndex]);
-            Debug.Log("EMP firerate = " + enemyProperties.EMPFireRate.ToString());
+            Debug.Log("EMP firerate = " + aIController.GetAI(aIController.numOfGames).EMPFireRate.ToString());
         }
     }
 }

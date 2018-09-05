@@ -37,19 +37,20 @@ public class PlayerHealth : MonoBehaviour {
         isVulnerable = true;
     }
 
+    // Return a score based on player health remaining. Score is used to calculate fitness.
     public float HealthRemainingScore()
     {
-        if (currentHealth == 1)
+        if (currentHealth == 0)
         {
-            return healthRemaining = 1.0f;
+            return healthRemaining = 3.0f;
         }
-        else if(currentHealth > 1)
+        if(currentHealth == 1)
         {
-            return healthRemaining = currentHealth / startingHealth;
+            return 0.0f;
         }
         else
         {
-            return 0.01f;
+            return startingHealth - (currentHealth / startingHealth);
         }
     }
 

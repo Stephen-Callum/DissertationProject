@@ -15,6 +15,7 @@ public class GameOverManager : MonoBehaviour {
     private GameObject enemy;
     private Animator anim;
     private Text restartText;
+    private AIController<Genes> aIController; 
     private PlayerHealth playerHealth;
     private EnemyHealth enemyHealth;
     private FireBullets fireBullets;
@@ -22,6 +23,7 @@ public class GameOverManager : MonoBehaviour {
     private void Awake()
     {
         anim = GetComponent<Animator>();
+        aIController = GetComponent<AIController<Genes>>();
         restartText = GameObject.Find("RestartCountdown").GetComponent<Text>();
         player = GameObject.FindGameObjectWithTag("Player");
         enemy = GameObject.FindGameObjectWithTag("Enemy");
@@ -47,6 +49,11 @@ public class GameOverManager : MonoBehaviour {
     {
         if (playerHealth.currentHealth <= 0 || enemyHealth.currentHealth <= 0)
         {
+            aIController.FitnessFunction(aIController.numOfGames);
+            // correct memory-wise?
+            aIController.numOfGames++;
+            // apply fitness function
+            aIController.SaveGeneration(aIController.fullPath);
             anim.SetTrigger("GameOver");
             restartTimer += Time.deltaTime;
             timeToRestart -= Time.deltaTime;

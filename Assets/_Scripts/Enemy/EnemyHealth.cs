@@ -31,18 +31,17 @@ public class EnemyHealth : MonoBehaviour {
         }
     }
 
-    // Calculate percentage health left for enemey
+    // Return a score depending on enemy health left. Score is used to calculate fitness.
     public float HealthRemainingScore()
     {
-        if (currentHealth > 0)
+        if (currentHealth == 0)
         {
-            return healthRemaining = 1 - (currentHealth / startingHealth);
+            return 0.0f;
         }
-        else if(currentHealth == 0)
+        else
         {
-            return healthRemaining = 1.0f;
+            return currentHealth / startingHealth;
         }
-        return 0;
     }
 
     private void Awake()

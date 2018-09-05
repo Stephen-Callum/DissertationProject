@@ -56,7 +56,8 @@ public class EnemyProperties : MonoBehaviour {
         }
     }
 
-    public static float rotationSpeed;
     public static float bulletFireRate;
     public static float empFireRate;
+    public static float rotationSpeed;
+    
 }

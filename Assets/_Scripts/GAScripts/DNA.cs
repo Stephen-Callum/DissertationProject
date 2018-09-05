@@ -32,7 +32,7 @@ public class DNA<T>
         }
     }
 
-    // Returns a score for each individual to decide how likely said individual is to reproduce
+    // Returns the fitness of an Gene in the Population list.
     public float CalculateFitness(int index)
     {
         Fitness = fitnessFunction(index);
