@@ -2,11 +2,15 @@
 using System;
 using UnityEditor;
 
+[Serializable]
 public class GeneticSaveData
 {
-    public List<Genes> PopulationGenes { get; set; }
-    public int NumberOfGamesPlayed { get; set; }
+    public List<Genes> Population { get; set; }
+    public int NumOfGames { get; set; }
     public bool CanPopulate { get; set; }
     //public float Fitness;
     public int Generation { get; set; }
+    public int BestGenes { get; set; }
+    public float BestFitness { get; set; }
+    public int BestGenesIndex { get; set; }
 }

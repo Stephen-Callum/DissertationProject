@@ -45,7 +45,7 @@ public class Genes {
     }
 
     // Represents the fitness of each individual where 0 is best fitness.
-    public float? Fitness { get; set; }
+    public float Fitness { get; set; }
     public static float BulletMinFR = 0.2f;
     public static float BulletMaxFR = 2.0f;
     public static float EmpMinFR = 4.0f;
@@ -53,7 +53,7 @@ public class Genes {
     private float bulletFireRate;
     private float empFireRate;
     //private IRandomiseGenes createRandGeneInterface;
-    private System.Random random;
+    //private System.Random random;
     //private Action<int> fitnessFunction;
 
     // Empty contructor
@@ -62,24 +62,11 @@ public class Genes {
 
     }
 
-    // Constructor for initialising child gene
+    // Each gene object is initialised with a gene array that contains random genes (each pertaining to enemy attack behaviours.)
     public Genes(int numOfProperties)
     {
         GeneArray = new float[numOfProperties];
-        Fitness = null;
-    }
-
-    // Each gene object is initialised with a gene array that contains random genes (each pertaining to enemy attack behaviours.)
-    public Genes(int numOfProperties, System.Random random)
-    {
-        //this.fitnessFunction = fitnessFunction;
-        this.random = random;
-
-        // Set length of Gene to the number of properties
-        GeneArray = new float[numOfProperties];
-
-        // Set fitness to null rather than 0 in order to avoid corrupting the fitness calculation.
-        Fitness = null;
+        Fitness = 10;
     }
 
     // Randomise Genes on initialisation

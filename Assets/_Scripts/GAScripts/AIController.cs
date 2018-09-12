@@ -1,17 +1,12 @@
 ﻿using System.Collections;
 using System;
 using System.Collections.Generic;
+using Unity;
 using UnityEngine;
 
 public class AIController : MonoBehaviour {
 
-    public List<Genes> Population { get; private set; }
-    public List<Genes> SortedPopulation { get; private set; }
-    public List<Genes> EliteGenes { get; private set; }
     public int Generation { get; private set; }
-    public float? BestFitness { get; private set; }
-    public float? NextBestFitness { get; private set; }
-    public int NumOfGames { get; private set; }
     public Genes CurrentGenes;
     [NonSerialized] public string FullPath;
     [SerializeField] private int populationSize;
@@ -28,19 +23,16 @@ public class AIController : MonoBehaviour {
     private EnemyHealth enemyHealth;
     private System.Random random;
     private bool canIncrementGames;
+    private Genes parent1;
+    private Genes parent2;
+    [SerializeField] public GeneticSaveData Save = new GeneticSaveData();
 
     // Save a Population of genes
     public void SaveGeneration(string filePath)
     {
-        GeneticSaveData save = new GeneticSaveData
-        {
-            Generation = Generation,
-            PopulationGenes = Population,
-            NumberOfGamesPlayed = NumOfGames,
-            CanPopulate = canPopulate,
-        };
+        
 
-        FileReadAndWrite.WriteToXMLFile(filePath, save);
+        FileReadAndWrite.WriteToXMLFile(filePath, Save);
     }
 
     // Load a population of genes
@@ -51,11 +43,7 @@ public class AIController : MonoBehaviour {
             return false;
         }
 
-        GeneticSaveData save = FileReadAndWrite.ReadFromBinaryFile(filePath);
-        Generation = save.Generation;
-        Population = save.PopulationGenes;
-        NumOfGames = save.NumberOfGamesPlayed;
-        canPopulate = save.CanPopulate;
+        Save = FileReadAndWrite.ReadFromBinaryFile(filePath);
         
         return true;
     }
@@ -63,14 +51,13 @@ public class AIController : MonoBehaviour {
     // Pull a gene from the population depending on the number of games played
     public void GetAI(int numGamesPlayed)
     {
-        CurrentGenes = Population[numGamesPlayed];
+        CurrentGenes = Save.Population[numGamesPlayed];
     }
 
     public void FitnessFunction(int generationNumber)
     {
         float score = 0.0f;
         print("generation number: " + generationNumber);
-        Genes geneToCalculate = Population[generationNumber];
 
         score += enemyHealth.HealthRemainingScore() + playerHealth.HealthRemainingScore();
         
@@ -80,11 +67,25 @@ public class AIController : MonoBehaviour {
         //    return;
         //}
         
-        geneToCalculate.Fitness = score;
+        Save.Population[generationNumber].Fitness = score;
+        if (generationNumber == 0)
+        {
+            Save.BestFitness = score;
+            Save.BestGenesIndex = generationNumber;
+        }
+        else
+        {
+            if (score < Save.BestFitness)
+            {
+                Save.BestFitness = score;
+                Save.BestGenesIndex = generationNumber;
+            }
+        }
+        print("Fitness = " + score);
 
         if (canIncrementGames)
         {
-            NumOfGames++;
+            Save.NumOfGames++;
             canIncrementGames = false;
         }
     }
@@ -100,9 +101,7 @@ public class AIController : MonoBehaviour {
         numOfEnemyVariables = 2;
         //genes = new Genes();
         random = new System.Random();
-        Population = new List<Genes>(populationSize);
-        SortedPopulation = new List<Genes>(populationSize);
-        EliteGenes = new List<Genes>(2);
+        Save.Population = new List<Genes>(populationSize);
         //createRandGenes = new Genes();
         Debug.Log("num of variables = " + numOfEnemyVariables);
         FullPath = Application.persistentDataPath + "/" + "Genetic Save";
@@ -111,40 +110,36 @@ public class AIController : MonoBehaviour {
 
     private void Start()
     {
+        Save.NumOfGames = 0;
         canIncrementGames = true;
         LoadGeneration(FullPath);
-        if (NumOfGames >= 5)
+        if (Save.NumOfGames >= 5)
         {
             BreedNewGenes();
         }
-        GetAI(NumOfGames);
-        print("population count: " + Population.Count);
+        GetAI(Save.NumOfGames);
+        print("population count: " + Save.Population.Count);
     }
 
     // Crossover and mutate the best genes to produce child gene and add them to the population
     private void BreedNewGenes()
     {
-        if (Population.Count > 0)
-        {
-            CalculateBestFitness();
-        }
-
-        for (int i = NumOfGames; i < Population.Count; i++)
-        {
-            if (i < Population.Count)
+        
+            if (Save.NumOfGames < Save.Population.Count)
             {
                 // Create two parents and assign the elite genes to them. Should look into breeding some of the lower performing genes.
-                Genes parent1, parent2 = new Genes(numOfEnemyVariables);
-                parent1 = EliteGenes[0];
-                parent2 = EliteGenes[1];
+                parent1 = Save.Population[Save.BestGenesIndex]; // Best gene
+                Debug.Log("parent 1 fitness=" + parent1.Fitness);
+                parent2 = Save.Population[UnityEngine.Random.Range(0, Save.Population.Count)]; // random gene
 
                 Genes child = parent1.Crossover(parent2, numOfEnemyVariables, random);
 
                 child.Mutate(mutationRate, random);
+                Debug.Log("child gene 0"+child.GeneArray[0]);
 
-                Population[i] = child;
+                Save.Population[Save.NumOfGames] = child;
             }
-        }
+        
     }
 
     //private Genes ChooseParent()
@@ -155,37 +150,9 @@ public class AIController : MonoBehaviour {
     //}
 
     // Calculates the sum of fitnesses in the population (used in ChooseParent). For each individual of the population, find the best performing individuals and copy them to BestGenes array
-    private void CalculateBestFitness()
-    {
-        //fitnessSum = 0;
-        // Store population in a list sorted by best fitness first
-        SortedPopulation = Population;
-        SortedPopulation.Sort(CompareGenes);
-        Genes best = SortedPopulation[0];
-        Genes nextBest = SortedPopulation[1];
-
-        BestFitness = best.Fitness;
-        NextBestFitness = nextBest.Fitness;
-        EliteGenes.Add(best);
-        EliteGenes.Add(nextBest);
-    }
 
     // what if there are null values?
-    private int CompareGenes(Genes a, Genes b)
-    {
-        if (a.Fitness > b.Fitness)
-        {
-            return -1;
-        }
-        else if (a.Fitness < b.Fitness)
-        {
-            return 1;
-        }
-        else
-        {
-            return 0;
-        }
-    }
+   
     
     // Initisalises the Population list with new random genes
     private void PopulateList()
@@ -195,9 +162,9 @@ public class AIController : MonoBehaviour {
             Generation = 0;
             for (int i = 0; i < populationSize; i++)
             {
-                Population.Add(new Genes(numOfEnemyVariables, random));
-                Population[i].RandomiseGenes();
-                Population[i].Generation = Generation;
+                Save.Population.Add(new Genes(numOfEnemyVariables));
+                Save.Population[i].RandomiseGenes();
+                Save.Population[i].Generation = Generation;
                 Generation++;
             }
             canPopulate = false;

@@ -7,7 +7,8 @@ using UnityEngine;
 public class GameOverManager : MonoBehaviour {
 
     public float RestartDelay;
-    
+
+    private bool gameRunning;
     private float restartTimer;
     private float timeToRestart;
     private bool isOver;
@@ -38,6 +39,11 @@ public class GameOverManager : MonoBehaviour {
         SetRestartText();
     }
 
+    private void Start()
+    {
+        gameRunning = true;
+    }
+
     private void SetRestartText()
     {
         restartText.text = timeToRestart.ToString();
@@ -45,28 +51,50 @@ public class GameOverManager : MonoBehaviour {
 
     private void Update()
     {
-        OnDeath();
-        Debug.Log("number of game = " + aIController.NumOfGames);
+        if (IsGameOver())
+        {
+            if (gameRunning)
+            {
+                OnDeath();
+            }
+
+            DeathScreenAnimation();
+        }
+
+        Debug.Log("number of game = " + aIController.Save.NumOfGames);
+    }
+
+
+    public bool IsGameOver()
+    {
+        if (playerHealth.currentHealth <= 0 || enemyHealth.currentHealth <= 0)
+        {
+            return true;
+        }
+
+        return false;
     }
 
     private void OnDeath()
     {
-        if (playerHealth.currentHealth <= 0 || enemyHealth.currentHealth <= 0)
+        gameRunning = false;
+        aIController.FitnessFunction(aIController.Save.NumOfGames);
+        // correct memory-wise? need to increase only once, maybe put it in a function to call once.
+        // apply fitness function
+        aIController.SaveGeneration(aIController.FullPath);
+        anim.SetTrigger("GameOver");
+        isOver = true;
+        fireBullets.CeaseFire(isOver);
+    }
+
+    private void DeathScreenAnimation()
+    {
+        restartTimer += Time.deltaTime;
+        timeToRestart -= Time.deltaTime;
+        SetRestartText();
+        if (restartTimer >= RestartDelay)
         {
-            aIController.FitnessFunction(aIController.NumOfGames);
-            // correct memory-wise? need to increase only once, maybe put it in a function to call once.
-            // apply fitness function
-            aIController.SaveGeneration(aIController.FullPath);
-            anim.SetTrigger("GameOver");
-            restartTimer += Time.deltaTime;
-            timeToRestart -= Time.deltaTime;
-            SetRestartText();
-            if(restartTimer >= RestartDelay)
-            {
-                SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
-            }
-            isOver = true;
-            fireBullets.CeaseFire(isOver);
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
         }
     }
 }
