@@ -29,7 +29,6 @@ public class CollectEMP : MonoBehaviour {
                 objectPoolingSystem.ReturnToPool("EMPCharge", gameObject);
                 enemyHealth.TakeDamage(EMPDamage);
             }
-            
         }
     }
 

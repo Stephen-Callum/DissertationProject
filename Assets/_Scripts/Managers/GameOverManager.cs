@@ -6,13 +6,14 @@ using UnityEngine;
 
 public class GameOverManager : MonoBehaviour {
 
-    public float restartDelay;
+    public float RestartDelay;
     
     private float restartTimer;
     private float timeToRestart;
     private bool isOver;
     private GameObject player;
     private GameObject enemy;
+    private GameObject gAManager;
     private Animator anim;
     private Text restartText;
     private AIController aIController; 
@@ -23,15 +24,17 @@ public class GameOverManager : MonoBehaviour {
     private void Awake()
     {
         anim = GetComponent<Animator>();
-        aIController = GetComponent<AIController>();
+        
         restartText = GameObject.Find("RestartCountdown").GetComponent<Text>();
         player = GameObject.FindGameObjectWithTag("Player");
         enemy = GameObject.FindGameObjectWithTag("Enemy");
+        gAManager = GameObject.FindGameObjectWithTag("GAManager");
+        aIController = gAManager.GetComponent<AIController>();
         playerHealth = player.GetComponent<PlayerHealth>();
         enemyHealth = enemy.GetComponent<EnemyHealth>();
         fireBullets = enemy.GetComponent<FireBullets>();
         isOver = false;
-        timeToRestart = restartDelay;
+        timeToRestart = RestartDelay;
         SetRestartText();
     }
 
@@ -43,22 +46,22 @@ public class GameOverManager : MonoBehaviour {
     private void Update()
     {
         OnDeath();
+        Debug.Log("number of game = " + aIController.NumOfGames);
     }
 
     private void OnDeath()
     {
         if (playerHealth.currentHealth <= 0 || enemyHealth.currentHealth <= 0)
         {
-            aIController.FitnessFunction(aIController.numOfGames);
-            // correct memory-wise?
-            aIController.numOfGames++;
+            aIController.FitnessFunction(aIController.NumOfGames);
+            // correct memory-wise? need to increase only once, maybe put it in a function to call once.
             // apply fitness function
-            aIController.SaveGeneration(aIController.fullPath);
+            aIController.SaveGeneration(aIController.FullPath);
             anim.SetTrigger("GameOver");
             restartTimer += Time.deltaTime;
             timeToRestart -= Time.deltaTime;
             SetRestartText();
-            if(restartTimer >= restartDelay)
+            if(restartTimer >= RestartDelay)
             {
                 SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
             }

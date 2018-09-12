@@ -38,6 +38,7 @@ public class EnemyHealth : MonoBehaviour {
         {
             return 0.0f;
         }
+
         else
         {
             return currentHealth / startingHealth;

@@ -48,9 +48,13 @@ public class PlayerHealth : MonoBehaviour {
         {
             return 0.0f;
         }
+        if (currentHealth == 2)
+        {
+            return 1.0f;
+        }
         else
         {
-            return startingHealth - (currentHealth / startingHealth);
+            return 2.0f;
         }
     }
 
@@ -58,7 +62,7 @@ public class PlayerHealth : MonoBehaviour {
 	private void Update()
     {
         OnHitFlash();
-        print(startingHealth);
+        print("starting health = " + startingHealth);
     }
     
     // Called when the player takes damage. 'damage' refers to the amount of damage the player takes.

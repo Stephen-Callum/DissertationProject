@@ -1,10 +1,12 @@
 ﻿using System.Collections.Generic;
 using System;
+using UnityEditor;
 
-[Serializable]
 public class GeneticSaveData
 {
-    public List<Genes> PopulationGenes;
+    public List<Genes> PopulationGenes { get; set; }
+    public int NumberOfGamesPlayed { get; set; }
+    public bool CanPopulate { get; set; }
     //public float Fitness;
-    public int Generation;
+    public int Generation { get; set; }
 }

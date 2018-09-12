@@ -999,7 +999,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 00fa5ee1c9f652748b6c995ad140daa0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  restartDelay: 5
+  RestartDelay: 5
 --- !u!1 &1026395151
 GameObject:
   m_ObjectHideFlags: 0
@@ -1204,7 +1204,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c5b98044edd4f8e47b76ee07cb672412, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  numOfGames: 0
   populationSize: 10
   mutationRate: 0.01
 --- !u!1 &1269095177

@@ -1,23 +1,25 @@
-﻿using System.IO;
+﻿using System.Xml.Serialization;
+using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 
+//[Serializable]
 public static class FileReadAndWrite
 {
-	public static void WriteToBinaryFile<T>(string filePath, T objectToWrite)
+	public static void WriteToXMLFile(string filePath, GeneticSaveData objectToWrite)
     {
-        using (Stream stream = File.Open(filePath, FileMode.Create))
+        XmlSerializer xmlSerializer = new XmlSerializer(typeof(GeneticSaveData));
+        using (var streamWriter = new StreamWriter(File.Open(filePath, FileMode.Create)))
         {
-            var binaryFormatter = new BinaryFormatter();
-            binaryFormatter.Serialize(stream, objectToWrite);
+            xmlSerializer.Serialize(streamWriter, objectToWrite);
         }
     }
 
-    public static T ReadFromBinaryFile<T>(string filePath)
+    public static GeneticSaveData ReadFromBinaryFile(string filePath)
     {
-        using (Stream stream = File.Open(filePath, FileMode.Open))
+        XmlSerializer xmlDeserializer = new XmlSerializer(typeof(GeneticSaveData));
+        using (var streamReader = new StreamReader(File.Open(filePath, FileMode.Open)))
         {
-            var binaryFormatter = new BinaryFormatter();
-            return (T)binaryFormatter.Deserialize(stream);
+            return xmlDeserializer.Deserialize(streamReader) as GeneticSaveData;
         }
     }
 }
