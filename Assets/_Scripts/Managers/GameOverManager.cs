@@ -25,7 +25,6 @@ public class GameOverManager : MonoBehaviour {
     private void Awake()
     {
         anim = GetComponent<Animator>();
-        
         restartText = GameObject.Find("RestartCountdown").GetComponent<Text>();
         player = GameObject.FindGameObjectWithTag("Player");
         enemy = GameObject.FindGameObjectWithTag("Enemy");
@@ -60,10 +59,7 @@ public class GameOverManager : MonoBehaviour {
 
             DeathScreenAnimation();
         }
-
-        Debug.Log("number of game = " + aIController.Save.NumOfGames);
     }
-
 
     public bool IsGameOver()
     {
@@ -75,16 +71,27 @@ public class GameOverManager : MonoBehaviour {
         return false;
     }
 
+    private void ShutGameDown()
+    {
+        if (aIController.Save.NumOfGames == aIController.Save.Population.Count)
+        {
+            Application.Quit();
+        }
+    }
+
     private void OnDeath()
     {
         gameRunning = false;
-        aIController.FitnessFunction(aIController.Save.NumOfGames);
+        //aIController.HealthFitnessFunction(aIController.Save.NumOfGames);
+        //aIController.TimeFitnessFuntion(aIController.Save.NumOfGames);
+        aIController.HealthAndTimeFitnessFunction(aIController.Save.NumOfGames);
         // correct memory-wise? need to increase only once, maybe put it in a function to call once.
         // apply fitness function
         aIController.SaveGeneration(aIController.FullPath);
         anim.SetTrigger("GameOver");
         isOver = true;
         fireBullets.CeaseFire(isOver);
+        ShutGameDown();
     }
 
     private void DeathScreenAnimation()

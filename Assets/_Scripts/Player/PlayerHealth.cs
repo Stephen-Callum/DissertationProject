@@ -6,8 +6,8 @@ using System;
 
 public class PlayerHealth : MonoBehaviour {
 
-    public int startingHealth = 3;
-    public int currentHealth;
+    public float startingHealth = 3.0f;
+    public float currentHealth;
     public float healthRemaining;
     public float flashSpeed = 5.0f;
     public float invulnerabilityTime;
@@ -40,7 +40,7 @@ public class PlayerHealth : MonoBehaviour {
     // Return a score based on player health remaining. Score is used to calculate fitness.
     public float HealthRemainingScore()
     {
-        if (currentHealth == 0)
+        if (currentHealth == 0.0f)
         {
             return healthRemaining = 3.0f;
         }
@@ -62,11 +62,10 @@ public class PlayerHealth : MonoBehaviour {
 	private void Update()
     {
         OnHitFlash();
-        print("starting health = " + startingHealth);
     }
     
     // Called when the player takes damage. 'damage' refers to the amount of damage the player takes.
-    public void TakeDamage(int damage)
+    public void TakeDamage(float damage)
     {
         if (isVulnerable)
         {

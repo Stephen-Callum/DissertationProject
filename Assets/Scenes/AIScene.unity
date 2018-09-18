@@ -222,6 +222,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   populationSize: 10
+  mutationRate: 0.01
 --- !u!4 &935045303
 Transform:
   m_ObjectHideFlags: 0

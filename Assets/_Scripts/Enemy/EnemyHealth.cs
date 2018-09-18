@@ -5,8 +5,8 @@ using UnityEngine;
 
 public class EnemyHealth : MonoBehaviour {
 
-    public int startingHealth = 100;
-    public int currentHealth;
+    public float startingHealth = 5.0f;
+    public float currentHealth;
     public float flashSpeed = 5.0f;
     public Slider healthSlider;
     public Image damageImage;
@@ -19,7 +19,7 @@ public class EnemyHealth : MonoBehaviour {
     private bool isDamaged;
     private float healthRemaining;
 
-    public void TakeDamage(int damage)
+    public void TakeDamage(float damage)
     {
         isDamaged = true;
         currentHealth -= damage;
@@ -73,8 +73,6 @@ public class EnemyHealth : MonoBehaviour {
         isDamaged = false;
     }
 
-    
-    
     private void Death()
     {
         isDead = true;

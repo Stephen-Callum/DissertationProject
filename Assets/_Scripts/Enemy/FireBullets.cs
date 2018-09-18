@@ -4,9 +4,6 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class FireBullets : MonoBehaviour {
-    
-    //public float fireRate;
-    //public float EMPFireRate;
 
     private int randomIndex;
     private float nextBulletShot;
@@ -48,7 +45,7 @@ public class FireBullets : MonoBehaviour {
         {
             frontTurretEnd,
             leftTurretEnd,
-            rightTurretEnd
+            rightTurretEnd,
         };
     }
 
@@ -63,11 +60,10 @@ public class FireBullets : MonoBehaviour {
     {
         if (Time.time > nextBulletShot && canFire)
         {
-            nextBulletShot = Time.time + aIController.CurrentGenes.GeneArray[0];
+            nextBulletShot = Time.time + aIController.CurrentGenes.BulletFireRate;
             objectPoolingSystem.GetFromPool("DamagingBullet", frontTurretEnd);
             objectPoolingSystem.GetFromPool("DamagingBullet", leftTurretEnd);
             objectPoolingSystem.GetFromPool("DamagingBullet", rightTurretEnd);
-            Debug.Log("Bullet firerate = " + aIController.CurrentGenes.GeneArray[0]);
         }
     }
 
@@ -76,9 +72,8 @@ public class FireBullets : MonoBehaviour {
         randomIndex = randomTransform.Next(possiblePositions.Count);
         if (Time.time > nextEMPShot && canFire)
         {
-            nextEMPShot = Time.time + aIController.CurrentGenes.GeneArray[1];
+            nextEMPShot = Time.time + aIController.CurrentGenes.EMPFireRate;
             objectPoolingSystem.GetFromPool("EMPCharge", possiblePositions[randomIndex]);
-            Debug.Log("EMP firerate = " + aIController.CurrentGenes.GeneArray[1]);
         }
     }
 }

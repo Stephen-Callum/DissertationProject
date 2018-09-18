@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class CollectEMP : MonoBehaviour {
 
-    [SerializeField] private int EMPDamage;
+    [SerializeField] private float EMPDamage;
     private GameObject enemy;
     private GameObject player;
     private EnemyHealth enemyHealth;
@@ -25,7 +25,6 @@ public class CollectEMP : MonoBehaviour {
         {
             if (playerHealth.canCollect)
             {
-                Debug.Log(collision.name);
                 objectPoolingSystem.ReturnToPool("EMPCharge", gameObject);
                 enemyHealth.TakeDamage(EMPDamage);
             }
