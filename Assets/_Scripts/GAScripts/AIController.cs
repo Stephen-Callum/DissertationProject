@@ -61,7 +61,7 @@ public class AIController : MonoBehaviour {
     //    float score = 0.0f;
     //    Debug.Log("Health fitness says hi");
     //    score += enemyHealth.HealthRemainingScore() + playerHealth.HealthRemainingScore();
-        
+
     //    Save.Population[generationNumber].Fitness = score;
     //    if (generationNumber == 0)
     //    {
@@ -85,46 +85,12 @@ public class AIController : MonoBehaviour {
     //    }
     //}
 
-    //public void TimeFitnessFuntion(int generationNumber)
-    //{
-    //    float score = 0.0f;
-    //    playTime = Time.timeSinceLevelLoad;
-    //    scaledPlayTime = Mathf.Pow((playTime - 30.0f) / 30.0f, 2);
-    //    score += scaledPlayTime;
-
-    //    Save.Population[generationNumber].PlayTime = playTime;
-    //    Save.Population[generationNumber].Fitness = score;
-    //    if (generationNumber == 0)
-    //    {
-    //        Save.BestFitness = score;
-    //        Save.BestGenesIndex = generationNumber;
-    //    }
-    //    else
-    //    {
-    //        if (score < Save.BestFitness)
-    //        {
-    //            Save.BestFitness = score;
-    //            Save.BestGenesIndex = generationNumber;
-    //        }
-    //    }
-    //    if (canIncrementGames)
-    //    {
-    //        Save.NumOfGames++;
-    //        canIncrementGames = false;
-    //    }
-
-    //    Debug.Log("Playtime = " + playTime);
-    //    Debug.Log("Time Fitness = " + score);
-    //}
-
-    // needs to show playtime also
-    public void HealthAndTimeFitnessFunction(int generationNumber)
+    public void TimeFitnessFuntion(int generationNumber)
     {
         float score = 0.0f;
-        float playTime = Time.timeSinceLevelLoad;
-        healthScore = enemyHealth.HealthRemainingScore() + playerHealth.HealthRemainingScore();
+        playTime = Time.timeSinceLevelLoad;
         scaledPlayTime = Mathf.Pow((playTime - 30.0f) / 30.0f, 2);
-        score += healthScore + scaledPlayTime;
+        score += scaledPlayTime;
 
         Save.Population[generationNumber].PlayTime = playTime;
         Save.Population[generationNumber].Fitness = score;
@@ -146,22 +112,56 @@ public class AIController : MonoBehaviour {
             Save.NumOfGames++;
             canIncrementGames = false;
         }
-        // for debugging purposes
-        
+
         Debug.Log("Playtime = " + playTime);
-        Debug.Log("Time Fitness = " + scaledPlayTime);
-        Debug.Log("Health Fitness = " + healthScore);
-        Debug.Log("Sum Fitness = " + score);
+        Debug.Log("Time Fitness = " + score);
     }
+
+    // needs to show playtime also
+    //public void HealthAndTimeFitnessFunction(int generationNumber)
+    //{
+    //    float score = 0.0f;
+    //    float playTime = Time.timeSinceLevelLoad;
+    //    healthScore = enemyHealth.HealthRemainingScore() + playerHealth.HealthRemainingScore();
+    //    scaledPlayTime = Mathf.Pow((playTime - 30.0f) / 30.0f, 2);
+    //    score += healthScore + scaledPlayTime;
+
+    //    Save.Population[generationNumber].PlayTime = playTime;
+    //    Save.Population[generationNumber].Fitness = score;
+    //    if (generationNumber == 0)
+    //    {
+    //        Save.BestFitness = score;
+    //        Save.BestGenesIndex = generationNumber;
+    //    }
+    //    else
+    //    {
+    //        if (score < Save.BestFitness)
+    //        {
+    //            Save.BestFitness = score;
+    //            Save.BestGenesIndex = generationNumber;
+    //        }
+    //    }
+    //    if (canIncrementGames)
+    //    {
+    //        Save.NumOfGames++;
+    //        canIncrementGames = false;
+    //    }
+    //    // for debugging purposes
+
+    //    Debug.Log("Playtime = " + playTime);
+    //    Debug.Log("Time Fitness = " + scaledPlayTime);
+    //    Debug.Log("Health Fitness = " + healthScore);
+    //    Debug.Log("Sum Fitness = " + score);
+    //}
 
     // will it run more than once?
     private void Awake()
     {
         canPopulate = true;
-        player = GameObject.FindGameObjectWithTag("Player");
-        playerHealth = player.GetComponent<PlayerHealth>();
-        enemy = GameObject.FindGameObjectWithTag("Enemy");
-        enemyHealth = enemy.GetComponent<EnemyHealth>();
+        //player = GameObject.FindGameObjectWithTag("Player");
+        //playerHealth = player.GetComponent<PlayerHealth>();
+        //enemy = GameObject.FindGameObjectWithTag("Enemy");
+        //enemyHealth = enemy.GetComponent<EnemyHealth>();
         numOfEnemyVariables = 2;
         random = new System.Random();
         Save.Population = new List<Genes>(populationSize);

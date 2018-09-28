@@ -83,8 +83,8 @@ public class GameOverManager : MonoBehaviour {
     {
         gameRunning = false;
         //aIController.HealthFitnessFunction(aIController.Save.NumOfGames);
-        //aIController.TimeFitnessFuntion(aIController.Save.NumOfGames);
-        aIController.HealthAndTimeFitnessFunction(aIController.Save.NumOfGames);
+        aIController.TimeFitnessFuntion(aIController.Save.NumOfGames);
+        //aIController.HealthAndTimeFitnessFunction(aIController.Save.NumOfGames);
         // correct memory-wise? need to increase only once, maybe put it in a function to call once.
         // apply fitness function
         aIController.SaveGeneration(aIController.FullPath);
