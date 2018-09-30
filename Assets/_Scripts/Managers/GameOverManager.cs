@@ -4,10 +4,9 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using UnityEngine;
 
-public class GameOverManager : MonoBehaviour {
-
+public class GameOverManager : MonoBehaviour
+{
     public float RestartDelay;
-
     private bool gameRunning;
     private float restartTimer;
     private float timeToRestart;
@@ -22,6 +21,7 @@ public class GameOverManager : MonoBehaviour {
     private EnemyHealth enemyHealth;
     private FireBullets fireBullets;
     
+    // One of the first functions to be called
     private void Awake()
     {
         anim = GetComponent<Animator>();
@@ -83,10 +83,8 @@ public class GameOverManager : MonoBehaviour {
     {
         gameRunning = false;
         //aIController.HealthFitnessFunction(aIController.Save.NumOfGames);
-        aIController.TimeFitnessFuntion(aIController.Save.NumOfGames);
-        //aIController.HealthAndTimeFitnessFunction(aIController.Save.NumOfGames);
-        // correct memory-wise? need to increase only once, maybe put it in a function to call once.
-        // apply fitness function
+        //aIController.TimeFitnessFuntion(aIController.Save.NumOfGames);
+        aIController.HealthAndTimeFitnessFunction(aIController.Save.NumOfGames);
         aIController.SaveGeneration(aIController.FullPath);
         anim.SetTrigger("GameOver");
         isOver = true;

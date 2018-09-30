@@ -4,7 +4,8 @@ using System.Collections.Generic;
 using Unity;
 using UnityEngine;
 
-public class AIController : MonoBehaviour {
+public class AIController : MonoBehaviour
+{
 
     public int Generation { get; private set; }
     public Genes CurrentGenes;
@@ -31,7 +32,6 @@ public class AIController : MonoBehaviour {
     public void SaveGeneration(string filePath)
     {
         FileReadAndWrite.WriteToXMLFile(filePath, Save);
-        //WriteDataToXML.WriteToXMLFile(dataFilePath, DataSave);
     }
 
     // Load a population of genes
@@ -51,15 +51,12 @@ public class AIController : MonoBehaviour {
     public void GetAI(int numGamesPlayed)
     {
         CurrentGenes = Save.Population[numGamesPlayed];
-        Debug.Log("--------------------Number of Games------------------------ = " + Save.NumOfGames);
-        Debug.Log("Bullet firerate = " + CurrentGenes.BulletFireRate);
-        Debug.Log("EMP firerate = " + CurrentGenes.EMPFireRate);
     }
 
+    // Calculate gene fitness based on health remaining from player and enemy.
     //public void HealthFitnessFunction(int generationNumber)
     //{
     //    float score = 0.0f;
-    //    Debug.Log("Health fitness says hi");
     //    score += enemyHealth.HealthRemainingScore() + playerHealth.HealthRemainingScore();
 
     //    Save.Population[generationNumber].Fitness = score;
@@ -76,7 +73,6 @@ public class AIController : MonoBehaviour {
     //            Save.BestGenesIndex = generationNumber;
     //        }
     //    }
-    //    Debug.Log("Health Fitness = " + score);
 
     //    if (canIncrementGames)
     //    {
@@ -85,46 +81,13 @@ public class AIController : MonoBehaviour {
     //    }
     //}
 
-    public void TimeFitnessFuntion(int generationNumber)
-    {
-        float score = 0.0f;
-        playTime = Time.timeSinceLevelLoad;
-        scaledPlayTime = Mathf.Pow((playTime - 30.0f) / 30.0f, 2);
-        score += scaledPlayTime;
-
-        Save.Population[generationNumber].PlayTime = playTime;
-        Save.Population[generationNumber].Fitness = score;
-        if (generationNumber == 0)
-        {
-            Save.BestFitness = score;
-            Save.BestGenesIndex = generationNumber;
-        }
-        else
-        {
-            if (score < Save.BestFitness)
-            {
-                Save.BestFitness = score;
-                Save.BestGenesIndex = generationNumber;
-            }
-        }
-        if (canIncrementGames)
-        {
-            Save.NumOfGames++;
-            canIncrementGames = false;
-        }
-
-        Debug.Log("Playtime = " + playTime);
-        Debug.Log("Time Fitness = " + score);
-    }
-
-    // needs to show playtime also
-    //public void HealthAndTimeFitnessFunction(int generationNumber)
+    // Calculate fitness based on time accumulate in game since start of round
+    //public void TimeFitnessFuntion(int generationNumber)
     //{
     //    float score = 0.0f;
-    //    float playTime = Time.timeSinceLevelLoad;
-    //    healthScore = enemyHealth.HealthRemainingScore() + playerHealth.HealthRemainingScore();
+    //    playTime = Time.timeSinceLevelLoad;
     //    scaledPlayTime = Mathf.Pow((playTime - 30.0f) / 30.0f, 2);
-    //    score += healthScore + scaledPlayTime;
+    //    score += scaledPlayTime;
 
     //    Save.Population[generationNumber].PlayTime = playTime;
     //    Save.Population[generationNumber].Fitness = score;
@@ -146,22 +109,47 @@ public class AIController : MonoBehaviour {
     //        Save.NumOfGames++;
     //        canIncrementGames = false;
     //    }
-    //    // for debugging purposes
-
-    //    Debug.Log("Playtime = " + playTime);
-    //    Debug.Log("Time Fitness = " + scaledPlayTime);
-    //    Debug.Log("Health Fitness = " + healthScore);
-    //    Debug.Log("Sum Fitness = " + score);
     //}
 
-    // will it run more than once?
+    // Calculate fitness based on both health and time fitnesses
+    public void HealthAndTimeFitnessFunction(int generationNumber)
+    {
+        float score = 0.0f;
+        float playTime = Time.timeSinceLevelLoad;
+        healthScore = enemyHealth.HealthRemainingScore() + playerHealth.HealthRemainingScore();
+        scaledPlayTime = Mathf.Pow((playTime - 30.0f) / 30.0f, 2);
+        score += healthScore + scaledPlayTime;
+
+        Save.Population[generationNumber].PlayTime = playTime;
+        Save.Population[generationNumber].Fitness = score;
+        if (generationNumber == 0)
+        {
+            Save.BestFitness = score;
+            Save.BestGenesIndex = generationNumber;
+        }
+        else
+        {
+            if (score < Save.BestFitness)
+            {
+                Save.BestFitness = score;
+                Save.BestGenesIndex = generationNumber;
+            }
+        }
+        if (canIncrementGames)
+        {
+            Save.NumOfGames++;
+            canIncrementGames = false;
+        }
+    }
+
+    // One of the first functions to be called
     private void Awake()
     {
         canPopulate = true;
-        //player = GameObject.FindGameObjectWithTag("Player");
-        //playerHealth = player.GetComponent<PlayerHealth>();
-        //enemy = GameObject.FindGameObjectWithTag("Enemy");
-        //enemyHealth = enemy.GetComponent<EnemyHealth>();
+        player = GameObject.FindGameObjectWithTag("Player");
+        playerHealth = player.GetComponent<PlayerHealth>();
+        enemy = GameObject.FindGameObjectWithTag("Enemy");
+        enemyHealth = enemy.GetComponent<EnemyHealth>();
         numOfEnemyVariables = 2;
         random = new System.Random();
         Save.Population = new List<Genes>(populationSize);
@@ -181,21 +169,19 @@ public class AIController : MonoBehaviour {
         GetAI(Save.NumOfGames);
     }
 
-    // Crossover and mutate the best genes to produce child gene and add them to the population
+    // Crossover and mutate the best genes to produce child gene and use that child for the next round of the game.
     private void BreedNewGenes()
     {
         if (Save.NumOfGames < Save.Population.Count)
         {
             // Create two parents and assign the elite genes to them. Should look into breeding some of the lower performing genes.
             parent1 = Save.Population[Save.BestGenesIndex]; // Best gene
-            Debug.Log("parent 1 fitness=" + parent1.Fitness);
             parent2 = Save.Population[UnityEngine.Random.Range(0, Save.Population.Count)]; // random gene from population of 100
 
             Genes child = parent1.Crossover(parent2, numOfEnemyVariables, random);
 
             child.Mutate(mutationRate, random, numOfEnemyVariables);
             child.Generation = Save.NumOfGames;
-            Debug.Log("child gene: " + child.BulletFireRate);
 
             Save.Population[Save.NumOfGames] = child;
         }

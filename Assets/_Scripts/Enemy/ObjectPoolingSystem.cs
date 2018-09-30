@@ -36,10 +36,10 @@ public class ObjectPoolingSystem : MonoBehaviour {
 
     public void InstantiatePool()
     {
-        // Allocate poolDictionary to memory
+        // Allocate memory for poolDictionary
         poolDictionary = new Dictionary<string, Queue<GameObject>>();
 
-        // For every pool in List<pools> create a queue of inactive game objects and enqueue them, then add them to the dictionary.
+        // For every pool in List<pools> create a queue of inactive game objects and enqueue them.
         foreach (Pool pool in pools)
         {
             Queue<GameObject> projectilePool = new Queue<GameObject>();
@@ -50,7 +50,7 @@ public class ObjectPoolingSystem : MonoBehaviour {
                 obj.SetActive(false);
                 projectilePool.Enqueue(obj);
             }
-
+            // Add object to queue in dictionary
             poolDictionary.Add(pool.bulletType, projectilePool);
         }
 	}
@@ -64,28 +64,31 @@ public class ObjectPoolingSystem : MonoBehaviour {
 
     public GameObject GetFromPool (string tag, Transform turretEnd)
     {
+        // check if dictionary contains key of object to be retrieved
         if (!poolDictionary.ContainsKey(tag))
         {
             Debug.LogWarning("Pool with key" + tag + "does not exist.");
             return null;
         }
+        // Dequeue object to be taken from pool and set to active
         GameObject objectFromPool = poolDictionary[tag].Dequeue();
         objectFromPool.SetActive(true);
+        // Set position and rotation to the rotation and position of the turrets
         objectFromPool.transform.position = turretEnd.transform.position;
         objectFromPool.transform.rotation = turretEnd.transform.rotation;
-
         IPooledObject pooledObj = objectFromPool.GetComponent<IPooledObject>();
-
+        // Apply bullet movement physics to projectile on spawn
         if (pooledObj != null)
         {
             pooledObj.OnObjectSpawn();
         }
-
+        // Enqueue the projectile
         poolDictionary[tag].Enqueue(objectFromPool);
-
+        // Return the project from pool
         return objectFromPool;
     }
-
+    
+    // Set object as inactive and return to queue
     public void ReturnToPool(string tag, GameObject objToPool)
     {
         objToPool.SetActive(false);

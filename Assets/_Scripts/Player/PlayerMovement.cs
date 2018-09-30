@@ -16,9 +16,11 @@ public class PlayerMovement : MonoBehaviour {
         // Check for horizontal input from keyboard
         float lateralMovement = Input.GetAxis("Horizontal");
 
+        // Multiply floats for X and Y axis movement by speed 
         float xMovement = lateralMovement * speed * Time.deltaTime;
         float yMovement = thrust * speed * Time.deltaTime;
 
+        // Create transform vector in accordance to input data
         Vector3 newPosition = new Vector3
         {
             x = transform.position.x + (xMovement * transform.right.x),
@@ -26,6 +28,7 @@ public class PlayerMovement : MonoBehaviour {
             z = transform.position.z + ((xMovement + yMovement) * transform.up.z)
         };
 
+        // Set transform to newPosition
         transform.position = newPosition;
 	}
 }

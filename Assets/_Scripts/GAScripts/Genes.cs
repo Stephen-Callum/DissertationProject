@@ -5,16 +5,12 @@ using System.Collections.Generic;
 using System.Xml.Serialization;
 
 [Serializable]
-public class Genes {
-
-    // Represents an array of characteristics for each individual
-    //public float[] GeneArray { get; set; }
-
-    //// A list of the best performing genes
-    //public List<Genes> EliteGenes { get; private set; }
-
+public class Genes
+{
     // Denotes the generation number of a gene
     public int Generation { get; set; }
+
+    // Property that stores and sets bullet fire rate
     public float BulletFireRate
     {
         get
@@ -31,6 +27,7 @@ public class Genes {
         }
     }
 
+    // Property that stores and sets EMP fire rate
     public float EMPFireRate
     {
         get
@@ -47,7 +44,6 @@ public class Genes {
         }
     }
 
-    // Represents the fitness of each individual where 0 is best fitness.
     public float Fitness { get; set; }
     public float PlayTime { get; set; }
     public static float BulletMinFR = 0.2f;
@@ -57,13 +53,7 @@ public class Genes {
     private float bulletFireRate;
     private float empFireRate;
 
-    //// Empty contructor
-    //public Genes()
-    //{
-
-    //}
-
-    // Each gene object is initialised with random firerates
+    // Each gene object is initialised with a fitness of 10 that is later overridden.
     public Genes()
     {
         Fitness = 10;
@@ -72,9 +62,10 @@ public class Genes {
     // Randomise Genes on initialisation
     public void RandomiseGenes()
     {
+        // For each element, randomise depending on that element's min and max
         bulletFireRate = UnityEngine.Random.Range(BulletMinFR, BulletMaxFR);
         empFireRate = UnityEngine.Random.Range(EmpMinFR, EmpMaxFR);
-        // For each element, randomise depending on that element's min and max
+        
     }
 
     // Randomise specific genes in gene array. Passed into Mutation method
@@ -117,19 +108,4 @@ public class Genes {
 
         return child;
     }
-    
-    //// Sets the fitness of an element in the Population List
-    //private float? CalculateFitness(int index)
-    //{
-    //    Fitness = fitnessFunction(index);
-    //    return Fitness;
-    //}
 }
-
-//public class XMLGenes
-//{
-//    [XmlIgnore] private Genes genes = new Genes();
-//    public float Generation { get { return genes.Generation; } set { } }
-//    public float Fitness { get { return genes.Fitness; } set { } }
-    
-//}

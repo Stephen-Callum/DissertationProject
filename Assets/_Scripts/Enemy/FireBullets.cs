@@ -3,7 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class FireBullets : MonoBehaviour {
+public class FireBullets : MonoBehaviour
+{
 
     private int randomIndex;
     private float nextBulletShot;
@@ -26,6 +27,7 @@ public class FireBullets : MonoBehaviour {
         }
     }
 
+    // One of the first functions to be called
     private void Awake()
     {
         canFire = true;
@@ -55,7 +57,7 @@ public class FireBullets : MonoBehaviour {
         BulletFire();
         EMPFire();
     }
-
+    // Fire bullets
     private void BulletFire()
     {
         if (Time.time > nextBulletShot && canFire)
@@ -66,7 +68,7 @@ public class FireBullets : MonoBehaviour {
             objectPoolingSystem.GetFromPool("DamagingBullet", rightTurretEnd);
         }
     }
-
+    // Fire EMP charges
     private void EMPFire()
     {
         randomIndex = randomTransform.Next(possiblePositions.Count);
