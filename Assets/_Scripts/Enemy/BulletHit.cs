@@ -2,12 +2,15 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BulletHit : MonoBehaviour {
+public class BulletHit : MonoBehaviour
+{
 
     [SerializeField] private float bulletDamage;
     private GameObject player;
     private PlayerHealth playerHealth;
     private ObjectPoolingSystem objectPoolingSystem;
+
+    public float BulletDamage { get => bulletDamage; set => bulletDamage = value; }
 
     private void Awake()
     {
@@ -22,7 +25,7 @@ public class BulletHit : MonoBehaviour {
             if (playerHealth.isVulnerable)
             {
                 objectPoolingSystem.ReturnToPool("DamagingBullet", gameObject);
-                playerHealth.TakeDamage(bulletDamage);
+                playerHealth.TakeDamage(BulletDamage);
             }
         }
     }

@@ -18,19 +18,35 @@ public class EnemyHealth : MonoBehaviour {
     private bool isDead;
     private bool isDamaged;
     private float healthRemaining;
+    private AudioSource[] audioSources;
+    private Animator anim;
 
+    private void Awake()
+    {
+        player = GameObject.FindGameObjectWithTag("Player");
+        playerHealth = player.GetComponent<PlayerHealth>();
+        playerMovement = player.GetComponent<PlayerMovement>();
+        audioSources = GetComponents<AudioSource>();
+        currentHealth = startingHealth;
+        isDamaged = false;
+        isDead = false;
+        anim = GetComponent<Animator>();
+    }
     public void TakeDamage(float damage)
     {
         isDamaged = true;
         currentHealth -= damage;
+        audioSources[2].Play();
         healthSlider.value = currentHealth;
-        if(currentHealth <= 0 && !isDead)
+        print("Setting Enemy animation trigger");
+        anim.ResetTrigger("EnemyTakeDamage");
+        anim.SetTrigger("EnemyTakeDamage");
+        if (currentHealth <= 0 && !isDead)
         {
             playerHealth.isVulnerable = false;
             Death();
         }
     }
-
     // Return a score depending on enemy health left. Score is used to calculate fitness.
     public float HealthRemainingScore()
     {
@@ -43,16 +59,6 @@ public class EnemyHealth : MonoBehaviour {
         {
             return currentHealth / startingHealth;
         }
-    }
-
-    private void Awake()
-    {
-        player = GameObject.FindGameObjectWithTag("Player");
-        playerHealth = player.GetComponent<PlayerHealth>();
-        playerMovement = player.GetComponent<PlayerMovement>();
-        currentHealth = startingHealth;
-        isDamaged = false;
-        isDead = false;
     }
 
     private void Update()
@@ -76,6 +82,7 @@ public class EnemyHealth : MonoBehaviour {
     private void Death()
     {
         isDead = true;
+        audioSources[3].Play();
         playerMovement.enabled = false;
     }
 }

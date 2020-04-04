@@ -20,6 +20,8 @@ public class PlayerHealth : MonoBehaviour {
     private PlayerMovement playerMovement;
     private bool isDead;
     private bool isDamaged;
+    private AudioSource[] audioSources;
+    private Animator anim;
 
     private void Awake()
     {
@@ -30,6 +32,8 @@ public class PlayerHealth : MonoBehaviour {
         isVulnerable = true;
         isDead = false;
         canCollect = true;
+        audioSources = GetComponents<AudioSource>();
+        anim = GetComponent<Animator>();
     }
 
 	public void ResetVulnerability()
@@ -67,12 +71,15 @@ public class PlayerHealth : MonoBehaviour {
     // Called when the player takes damage. 'damage' refers to the amount of damage the player takes.
     public void TakeDamage(float damage)
     {
-        if (isVulnerable)
+        if (isVulnerable && !isDead)
         {
             isDamaged = true;
+            audioSources[0].Play();
             currentHealth -= damage;
             healthSlider.value = currentHealth;
             isVulnerable = false;
+            anim.ResetTrigger("PlayerTakeDamage");
+            anim.SetTrigger("PlayerTakeDamage");
             if (currentHealth <= 0 && !isDead)
             {
                 isVulnerable = false;
@@ -98,6 +105,7 @@ public class PlayerHealth : MonoBehaviour {
     private void Death()
     {
         isDead = true;
+        audioSources[1].Play();
         canCollect = false;
         playerMovement.enabled = false;
     }

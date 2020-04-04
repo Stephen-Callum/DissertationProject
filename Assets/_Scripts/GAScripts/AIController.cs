@@ -52,66 +52,6 @@ public class AIController : MonoBehaviour
     {
         CurrentGenes = Save.Population[numGamesPlayed];
     }
-    
-    /* 2 of 3 fitness functions commented out for testing
-
-    Calculate gene fitness based on health remaining from player and enemy.
-    public void HealthFitnessFunction(int generationNumber)
-    {
-       float score = 0.0f;
-       score += enemyHealth.HealthRemainingScore() + playerHealth.HealthRemainingScore();
-
-       Save.Population[generationNumber].Fitness = score;
-       if (generationNumber == 0)
-       {
-           Save.BestFitness = score;
-           Save.BestGenesIndex = generationNumber;
-       }
-       else
-       {
-           if (score < Save.BestFitness)
-           {
-               Save.BestFitness = score;
-               Save.BestGenesIndex = generationNumber;
-           }
-       }
-
-       if (canIncrementGames)
-       {
-           Save.NumOfGames++;
-           canIncrementGames = false;
-       }
-    }
-
-    Calculate fitness based on time accumulate in game since start of round
-    public void TimeFitnessFuntion(int generationNumber)
-    {
-       float score = 0.0f;
-       playTime = Time.timeSinceLevelLoad;
-       scaledPlayTime = Mathf.Pow((playTime - 30.0f) / 30.0f, 2);
-       score += scaledPlayTime;
-
-       Save.Population[generationNumber].PlayTime = playTime;
-       Save.Population[generationNumber].Fitness = score;
-       if (generationNumber == 0)
-       {
-           Save.BestFitness = score;
-           Save.BestGenesIndex = generationNumber;
-       }
-       else
-       {
-           if (score < Save.BestFitness)
-           {
-               Save.BestFitness = score;
-               Save.BestGenesIndex = generationNumber;
-           }
-       }
-       if (canIncrementGames)
-       {
-           Save.NumOfGames++;
-           canIncrementGames = false;
-       }
-    }*/
 
     // Calculate fitness based on both health and time fitnesses
     public void HealthAndTimeFitnessFunction(int generationNumber)

@@ -18,6 +18,7 @@ public class FireBullets : MonoBehaviour
     private ObjectPoolingSystem objectPoolingSystem;
     private GameObject GAManager;
     private AIController aIController;
+    private AudioSource[] fireSounds;
 
     public void CeaseFire(bool gameOver)
     {
@@ -36,6 +37,7 @@ public class FireBullets : MonoBehaviour
         rightTurretEnd = GameObject.FindGameObjectWithTag("RightTurret").transform;
         GAManager = GameObject.FindGameObjectWithTag("GAManager");
         aIController = GAManager.GetComponent<AIController>();
+        fireSounds = GetComponents<AudioSource>();
     }
 
     // Use this for initialization
@@ -62,6 +64,7 @@ public class FireBullets : MonoBehaviour
     {
         if (Time.time > nextBulletShot && canFire)
         {
+            fireSounds[0].Play();
             nextBulletShot = Time.time + aIController.CurrentGenes.BulletFireRate;
             objectPoolingSystem.GetFromPool("DamagingBullet", frontTurretEnd);
             objectPoolingSystem.GetFromPool("DamagingBullet", leftTurretEnd);
@@ -74,6 +77,7 @@ public class FireBullets : MonoBehaviour
         randomIndex = randomTransform.Next(possiblePositions.Count);
         if (Time.time > nextEMPShot && canFire)
         {
+            fireSounds[1].Play();
             nextEMPShot = Time.time + aIController.CurrentGenes.EMPFireRate;
             objectPoolingSystem.GetFromPool("EMPCharge", possiblePositions[randomIndex]);
         }

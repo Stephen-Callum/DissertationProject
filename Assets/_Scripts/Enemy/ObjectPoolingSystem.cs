@@ -22,7 +22,6 @@ public class ObjectPoolingSystem : MonoBehaviour {
     }
     #endregion
 
-    //public Transform turretEnd;
     public List<Pool> pools;
 
     // A dictionary that stores separate queues of pooled game objects
