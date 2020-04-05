@@ -38,7 +38,6 @@ public class EnemyHealth : MonoBehaviour {
         currentHealth -= damage;
         audioSources[2].Play();
         healthSlider.value = currentHealth;
-        print("Setting Enemy animation trigger");
         anim.ResetTrigger("EnemyTakeDamage");
         anim.SetTrigger("EnemyTakeDamage");
         if (currentHealth <= 0 && !isDead)
