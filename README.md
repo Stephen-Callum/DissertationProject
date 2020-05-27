@@ -9,10 +9,10 @@ and be able to apply it to any playerskill level.
 
 ![Tartarus](https://imgur.com/Ztg9X7V.jpg)
 
-The player plays as 'rometheus 1' a scouting ship for the home ship "Prometheus".
-![Prometheus 1](https://imgur.com/k73Fy0T.jpg)
+The player plays as 'Apollo' a scouting ship for the home ship "Prometheus".
+![Apollo](https://imgur.com/k73Fy0T.jpg)
 
-Prometheus 1 is sent to investigate a distress signal that we come to find out was sent by an enemy home ship 'Zeus'.
+Apollo is sent to investigate a distress signal that we come to find out was sent by an enemy home ship 'Zeus'.
 Zeus wants to "steal" the technology from Prometheus's scout ship in order to increase their ships power and take Prometheus's resources.
 
 <img src="https://imgur.com/77l4kdJ.jpg" alt="EMPCharge" width="200" height="200"/> <img src="https://imgur.com/aygxdcQ.jpg" alt="CannonFire" width="250" height="250"/> <img src="https://imgur.com/UqKYQlP.jpg" alt="Zeus" width="250" height="250"/>
