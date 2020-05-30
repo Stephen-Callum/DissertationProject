@@ -1,4 +1,4 @@
-# TARTARUS
+# [TARTARUS](https://stephen-callum.itch.io/tartarus/devlog/136181/game-launch)
 
 [Link to itch.io page](https://stephen-callum.itch.io/tartarus/devlog/136181/game-launch).
 
