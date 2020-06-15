@@ -5,7 +5,7 @@
 ### Using genetic algorithms to develop a new technique for dynamic difficulty adjustment in games.
 
 The aim of using genetic algorithms was to be able to automate the difficulty adjustment process
-and be able to apply it to any playerskill level.
+and be able to apply it to any playerskill level. This game was all made with self made pixel art using Piskel.
 
 ![Tartarus](https://imgur.com/Ztg9X7V.jpg)
 
